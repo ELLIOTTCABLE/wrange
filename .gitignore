@@ -1,0 +1,10 @@
+*.install
+**/.merlin
+_opam/*
+_build/*
+node_modules/*
+
+*.cmi
+*.cmt
+*.cmx
+*.o
