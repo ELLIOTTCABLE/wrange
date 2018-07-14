@@ -1,0 +1,25 @@
+{
+   "name" : "wrange",
+   "version": "0.0.1",
+
+   "refmt": 3,
+   "suffix": " .bs.js",
+
+   "package-specs": {
+      "module": "commonjs",
+      "in-source": true
+   },
+
+   "bsc-flags": [
+      "-bs-no-version-header",
+      "-bs-cross-module-opt"
+   ],
+
+   "ppx-flags": [
+      "reason/bin/ppx_deriving"
+   ],
+
+   "sources": [
+      "src"
+   ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "wrange",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "bs-platform": "^4.0.0",
+    "ocaml-language-server": "^1.0.35"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ELLIOTTCABLE <npm@ell.io>",
+  "license": "ISC"
+}
