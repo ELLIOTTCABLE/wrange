@@ -12,6 +12,7 @@
   "suffix": ".bs.js",
   "bs-dependencies": [],
   "bsc-flags": [
+    "-bs-super-errors",
     "-bs-no-version-header",
     "-bs-cross-module-opt"
   ],

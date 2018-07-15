@@ -11,4 +11,5 @@ node_modules/*
 *.cma
 *.cmj
 *.o
+lib/bs/*
 .bsb.lock
