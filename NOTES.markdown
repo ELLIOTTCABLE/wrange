@@ -29,3 +29,6 @@ Server
 
 nope. bsb turned out to be a hot fracking mess and timesink. I think I'll either manually invoke the
 compiler, or just quarantine my OCaml to a single one of the aforementioned modules.
+
+welp can't even install "reason" packages, i.e. typing bindings to JS, without bsb. hot. fracking.
+mess.
