@@ -22,7 +22,7 @@ module Person = struct
          birthday = birthday;
       }
 
-   let of_object obj =
-      personFromJs obj
+   let of_object obj = personFromJs obj
 
+   let to_object p = personToJs p
 end
