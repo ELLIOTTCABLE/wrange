@@ -5,6 +5,8 @@ _build/*
 node_modules/*
 
 *.cmi
+*.cmti
 *.cmt
 *.cmx
+*.cmj
 *.o
