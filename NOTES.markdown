@@ -25,3 +25,7 @@ CLI
 Server
 ======
  - four methods, forks from the CLI with a flag
+
+
+nope. bsb turned out to be a hot fracking mess and timesink. I think I'll either manually invoke the
+compiler, or just quarantine my OCaml to a single one of the aforementioned modules.
