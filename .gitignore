@@ -5,8 +5,10 @@ _build/*
 node_modules/*
 
 *.cmi
-*.cmti
-*.cmt
 *.cmx
+*.cmt
+*.cmti
+*.cma
 *.cmj
 *.o
+.bsb.lock
