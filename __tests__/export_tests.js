@@ -15,10 +15,22 @@ describe("Exports", () => {
          expect(Person.create).toBeInstanceOf(Function)
       })
 
+      test("exports acceptable symbols for variant arguments", () => {
+         expect(typeof Person.female).toBe("symbol")
+      })
+
       test("can be successfully created from JS", () => {
-         const person = Person.create("Last Name", "First Name", "Female", "Blue",
+         const it = Person.create("Last Name", "First Name", Person.female, Person.blue,
             new Date(1966, 2, 7))
-         expect(person).toBeDefined()
+         expect(it).toBeDefined()
+      })
+
+      test("preforms basic validation of values coming in from the JS-side", () => {
+         expect(()=> Person.create("Last Name" /*, missing_arguments */) ).toThrowError()
+         expect(()=> Person.create(1234 /* incorrect type */, "First Name", Person.female,
+            Person.blue, new Date(1966, 2, 7)) ).toThrowError()
+         expect(()=> Person.create("Last Name", "First Name", Person.green /* disallowed variant */,
+            Person.blue, new Date(1966, 2, 7)) ).toThrowError()
       })
    })
 }) // describe Exports
