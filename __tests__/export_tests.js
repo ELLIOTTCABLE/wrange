@@ -1,4 +1,4 @@
-const wrange = require('../src/wrange.bs.js');
+const wrange = require('../src/exports.js');
 
 describe("Exports", () => {
   test("exists", () => {
