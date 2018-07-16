@@ -13,13 +13,7 @@ type person = {
 type t = person
 
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
-   {
-      last_name = last_name;
-      first_name = first_name;
-      gender = gender;
-      favourite_colour = favourite_colour;
-      birthday = birthday;
-   }
+   { last_name; first_name; gender; favourite_colour; birthday }
 
 let of_object obj = personFromJs obj
 
