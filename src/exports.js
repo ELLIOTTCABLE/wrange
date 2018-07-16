@@ -73,3 +73,5 @@ exports.Person.create = function(obj, first_name = null, gender, favourite_colou
 
    return PersonModule.of_object(obj)
 }
+
+exports.Person.extract = PersonModule.to_object

@@ -32,5 +32,18 @@ describe("Exports", () => {
          expect(()=> Person.create("Last Name", "First Name", Person.green /* disallowed variant */,
             Person.blue, new Date(1966, 2, 7)) ).toThrowError()
       })
+
+      test("can be extracted back into a JS Object after being received", () => {
+         const props = {
+            last_name: "Last Name",
+            first_name: "First Name",
+            gender: Person.female,
+            favourite_colour: Person.blue,
+            birthday: new Date(1966, 2, 7)
+         }
+
+         const it = Person.create(props)
+         expect(Person.extract(it)).toEqual(props)
+      })
    })
 }) // describe Exports
