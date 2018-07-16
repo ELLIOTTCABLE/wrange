@@ -22,6 +22,18 @@ function of_object(obj) {
         ];
 }
 
+function to_object(p) {
+  var param = p;
+  return {
+          last_name: param[/* last_name */0],
+          first_name: param[/* first_name */1],
+          gender: param[/* gender */2],
+          favourite_colour: param[/* favourite_colour */3],
+          birthday: param[/* birthday */4]
+        };
+}
+
 exports.create = create;
 exports.of_object = of_object;
+exports.to_object = to_object;
 /* No side effect */
