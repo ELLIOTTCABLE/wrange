@@ -70,3 +70,11 @@ I don't find a timely solution to what's ailing me there.
 
 Going to switch tracks entirely when I come back to this, dive into the REST API, even though that
 depends on the currently-blocked parser for ingestion, at least I can make some progress on it.
+
+----
+
+Welp, “Within the *same* code base, build a *standalone* REST API” seems inherently contradictory.
+Short any direction to the contrary, I guess I'll just build it into the CLI interface?
+
+Going with Express, as it's a quick and easy solution. More to learn on the go, though, as I haven't
+used it in years, and remember basically nothing ...
