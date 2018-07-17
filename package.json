@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "main": "src/exports.js",
   "scripts": {
-    "test": "npm run build && jest",
+    "test": "npm run build && jest --coverage",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
-    "watch": "bsb -make-world -w"
+    "watch:build": "bsb -make-world -w",
+    "watch:test": "jest --coverage --watchAll"
   },
   "keywords": [
     "BuckleScript"
