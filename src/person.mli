@@ -27,6 +27,6 @@ val set_create : unit -> set
 val set_add : set -> person -> unit
 val set_find_exn : set -> string -> string -> string -> person
 
-val list_of_set : set -> sorts:(sort_key * sort_order) list -> person list
+val array_of_set : set -> sorts:(sort_key * sort_order) list -> person array
 
 val string_of_birthday : person -> string

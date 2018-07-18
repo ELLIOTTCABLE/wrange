@@ -24,6 +24,10 @@ let string_of_birthday person =
    | [| date; _time |] -> date
    | _ -> failwith "Unreachable"
 
+let nobody () =
+   { last_name = ""; first_name = ""; gender = Unspecified;
+     favourite_colour = Black; birthday = Js.Date.make () }
+
 
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
    { last_name; first_name; gender; favourite_colour; birthday }
@@ -46,6 +50,14 @@ let set_find_exn set last first birthday =
    Hashtbl.find set (last, first, birthday)
 
 
-let list_of_set set ~sorts =
-   (fun key person list -> list (* noop *))
-   |. Hashtbl.fold set []
+(* FIXME: First pass. Needs optimization.
+ * FIXME: There's *gotta* be an Array.of_seq or Hashtbl.to_array implementation I can gank,
+ *        somewhere. Hate rolling my own for super-generic code like this.*)
+let array_of_set (set:set) ~sorts =
+   let i = ref 0 in
+   let arr = Array.make (Hashtbl.length set) @@ nobody () in
+   Hashtbl.iter begin fun _key person ->
+      arr.(!i) <- person;
+      i := !i + 1
+   end set;
+   arr

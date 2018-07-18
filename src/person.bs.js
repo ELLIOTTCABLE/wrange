@@ -1,6 +1,7 @@
 'use strict';
 
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
+var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 function string_of_birthday(person) {
@@ -14,6 +15,16 @@ function string_of_birthday(person) {
   } else {
     return match[0];
   }
+}
+
+function nobody() {
+  return /* record */[
+          /* last_name */"",
+          /* first_name */"",
+          /* gender : Unspecified */3,
+          /* favourite_colour : Black */0,
+          /* birthday */new Date()
+        ];
 }
 
 function create(last_name, first_name, gender, favourite_colour, birthday) {
@@ -72,10 +83,15 @@ function set_find_exn(set, last, first, birthday) {
             ]);
 }
 
-function list_of_set(set, _) {
-  return Hashtbl.fold((function (_, _$1, list) {
-                return list;
-              }), set, /* [] */0);
+function array_of_set(set, _) {
+  var i = /* record */[/* contents */0];
+  var arr = Caml_array.caml_make_vect(set[/* size */0], nobody(/* () */0));
+  Hashtbl.iter((function (_, person) {
+          Caml_array.caml_array_set(arr, i[0], person);
+          i[0] = i[0] + 1 | 0;
+          return /* () */0;
+        }), set);
+  return arr;
 }
 
 exports.create = create;
@@ -84,6 +100,6 @@ exports.to_object = to_object;
 exports.set_create = set_create;
 exports.set_add = set_add;
 exports.set_find_exn = set_find_exn;
-exports.list_of_set = list_of_set;
+exports.array_of_set = array_of_set;
 exports.string_of_birthday = string_of_birthday;
 /* No side effect */
