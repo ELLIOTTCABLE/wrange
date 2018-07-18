@@ -8,7 +8,7 @@ let make_birthday_exn iso8601 =
    else failwith "Unparsable date"
 
 let make_person ?(last_name = "Wittig") ?(first_name = "Kachel")
-      ?(gender = Person.Female) ?(favourite_colour = Person.Yellow)
+      ?(gender = `Female) ?(favourite_colour = `Yellow)
       ?(birthday = make_birthday_exn "1989-01-25") () =
    Person.create ~last_name ~first_name ~gender ~favourite_colour ~birthday
 
@@ -17,8 +17,8 @@ describe "Data model" begin fun ()->
    describe "Person" begin fun ()->
       test "can be created" Expect.(fun ()->
          expect (fun _ ->
-            Person.create ~first_name:"Kachel" ~last_name:"Wittig" ~gender:Person.Female
-               ~favourite_colour:Person.Yellow ~birthday:(make_birthday_exn "1989-01-25") |> ignore
+            Person.create ~first_name:"Kachel" ~last_name:"Wittig" ~gender:`Female
+               ~favourite_colour:`Yellow ~birthday:(make_birthday_exn "1989-01-25") |> ignore
          ) |> not_ |> toThrow
       );
 
@@ -81,7 +81,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Ascending]) in
-            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
 
@@ -94,7 +94,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Descending]) in
-            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
             |> (toEqual [|"Ranger"; "Kelly"; "Andy"|])
          );
 
@@ -107,7 +107,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Ascending; Last, Ascending]) in
-            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
 
@@ -120,7 +120,7 @@ describe "Data model" begin fun ()->
                make_person ~first_name:"Ranger" ~last_name:"Awesomedottir" ();
             ];
             let result = Person.(array_of_set set ~sorts:[Last, Ascending; First, Ascending]) in
-            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"; "Kachel"|])
          );
       end

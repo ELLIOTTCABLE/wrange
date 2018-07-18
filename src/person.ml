@@ -1,21 +1,22 @@
 type sort_key = Last | First | Gender | Birthday
 type sort_order = Ascending | Descending
 
-type gender = Male | Female | Neither | Unspecified
-type colour = Black | White | Red | Orange | Yellow | Green | Blue | Indigo | Violet
+type gender = [`Male | `Female | `Neither | `Unspecified] [@@bs.deriving jsConverter]
+type colour = [`Black | `White | `Red | `Orange | `Yellow | `Green
+   | `Blue | `Indigo | `Violet] [@@bs.deriving jsConverter]
 
 (* XXX: I'd prefer that the type-converters be `Person.fromJs`, not `Person.tFromJs`, etceteras.
  *      Pending <https://github.com/BuckleScript/bucklescript/issues/2947>. *)
-type person = {
+type t = {
    last_name : string;
    first_name : string;
    gender : gender;
    favourite_colour : colour;
    birthday : Js.Date.t;
 } [@@bs.deriving {jsConverter = newType}]
-type t = person
+type abs = abs_t
 
-type set = ((string * string * string), person) Hashtbl.t
+type set = ((string * string * string), t) Hashtbl.t
 
 
 let string_of_birthday person =
@@ -25,16 +26,16 @@ let string_of_birthday person =
    | _ -> failwith "Unreachable"
 
 let nobody () =
-   { last_name = ""; first_name = ""; gender = Unspecified;
-     favourite_colour = Black; birthday = Js.Date.make () }
+   { last_name = ""; first_name = ""; gender = `Unspecified;
+     favourite_colour = `Black; birthday = Js.Date.make () }
 
 
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
    { last_name; first_name; gender; favourite_colour; birthday }
 
-let of_object obj = personFromJs obj
+let of_object obj = tFromJs obj
 
-let to_object p = personToJs p
+let to_object p = tToJs p
 
 let compare key a b =
    match key with

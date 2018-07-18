@@ -20,8 +20,8 @@ function make_birthday_exn(iso8601) {
 function make_person($staropt$star, $staropt$star$1, $staropt$star$2, $staropt$star$3, $staropt$star$4, _) {
   var last_name = $staropt$star !== undefined ? $staropt$star : "Wittig";
   var first_name = $staropt$star$1 !== undefined ? $staropt$star$1 : "Kachel";
-  var gender = $staropt$star$2 !== undefined ? $staropt$star$2 : /* Female */1;
-  var favourite_colour = $staropt$star$3 !== undefined ? $staropt$star$3 : /* Yellow */4;
+  var gender = $staropt$star$2 !== undefined ? $staropt$star$2 : /* Female */-322301012;
+  var favourite_colour = $staropt$star$3 !== undefined ? $staropt$star$3 : /* Yellow */82908052;
   var birthday = $staropt$star$4 !== undefined ? Js_primitive.valFromOption($staropt$star$4) : make_birthday_exn("1989-01-25");
   return Person.create(last_name, first_name, gender, favourite_colour, birthday);
 }
@@ -30,7 +30,7 @@ describe("Data model", (function () {
         describe("Person", (function () {
                 Jest.test("can be created", (function () {
                         return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
-                                              Person.create("Wittig", "Kachel", /* Female */1, /* Yellow */4, make_birthday_exn("1989-01-25"));
+                                              Person.create("Wittig", "Kachel", /* Female */-322301012, /* Yellow */82908052, make_birthday_exn("1989-01-25"));
                                               return /* () */0;
                                             }))));
                       }));

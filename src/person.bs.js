@@ -23,8 +23,8 @@ function nobody() {
   return /* record */[
           /* last_name */"",
           /* first_name */"",
-          /* gender : Unspecified */3,
-          /* favourite_colour : Black */0,
+          /* gender : Unspecified */-394757225,
+          /* favourite_colour : Black */-937474657,
           /* birthday */new Date()
         ];
 }
