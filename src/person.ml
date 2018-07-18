@@ -44,3 +44,8 @@ let set_add set person =
 
 let set_find_exn set last first birthday =
    Hashtbl.find set (last, first, birthday)
+
+
+let list_of_set set ~sorts =
+   (fun key person list -> list (* noop *))
+   |. Hashtbl.fold set []

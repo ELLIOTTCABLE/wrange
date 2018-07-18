@@ -72,11 +72,18 @@ function set_find_exn(set, last, first, birthday) {
             ]);
 }
 
+function list_of_set(set, _) {
+  return Hashtbl.fold((function (_, _$1, list) {
+                return list;
+              }), set, /* [] */0);
+}
+
 exports.create = create;
 exports.of_object = of_object;
 exports.to_object = to_object;
 exports.set_create = set_create;
 exports.set_add = set_add;
 exports.set_find_exn = set_find_exn;
+exports.list_of_set = list_of_set;
 exports.string_of_birthday = string_of_birthday;
 /* No side effect */

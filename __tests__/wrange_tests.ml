@@ -61,6 +61,16 @@ describe "Data model" begin fun ()->
                (Person.string_of_birthday a_person) in
             expect result |> (toBe a_person)
          );
+
+         test "can be folded into a list" Expect.(fun ()->
+            let set = Person.set_create ()
+            and a_person = make_person ~first_name:"Kelly" ()
+            and another_person = make_person ~first_name:"Andy" () in
+            Person.set_add set a_person;
+            Person.set_add set another_person;
+            let l = Person.list_of_set set ~sorts:[] in
+            expect (List.length l) |> (toBe 2)
+         );
       end
    end
 end
