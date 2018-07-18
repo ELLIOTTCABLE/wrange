@@ -4,25 +4,14 @@ var Jest = require("@glennsl/bs-jest/src/jest.js");
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Person = require("../src/person.bs.js");
-var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
-
-function make_birthday_exn(iso8601) {
-  var date = new Date(iso8601);
-  var flo = date.valueOf();
-  if (isNaN(flo)) {
-    return Pervasives.failwith("Unparsable date");
-  } else {
-    return date;
-  }
-}
 
 function make_person($staropt$star, $staropt$star$1, $staropt$star$2, $staropt$star$3, $staropt$star$4, _) {
   var last_name = $staropt$star !== undefined ? $staropt$star : "Wittig";
   var first_name = $staropt$star$1 !== undefined ? $staropt$star$1 : "Kachel";
   var gender = $staropt$star$2 !== undefined ? $staropt$star$2 : /* Female */-322301012;
   var favourite_colour = $staropt$star$3 !== undefined ? $staropt$star$3 : /* Yellow */82908052;
-  var birthday = $staropt$star$4 !== undefined ? Js_primitive.valFromOption($staropt$star$4) : make_birthday_exn("1989-01-25");
+  var birthday = $staropt$star$4 !== undefined ? Js_primitive.valFromOption($staropt$star$4) : Person.birthday_of_string_exn("1989-01-25");
   return Person.create(last_name, first_name, gender, favourite_colour, birthday);
 }
 
@@ -30,13 +19,52 @@ describe("Data model", (function () {
         describe("Person", (function () {
                 Jest.test("can be created", (function () {
                         return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
-                                              Person.create("Wittig", "Kachel", /* Female */-322301012, /* Yellow */82908052, make_birthday_exn("1989-01-25"));
+                                              Person.create("Wittig", "Kachel", /* Female */-322301012, /* Yellow */82908052, Person.birthday_of_string_exn("1989-01-25"));
                                               return /* () */0;
                                             }))));
                       }));
                 Jest.test("can produce a string for their birthday", (function () {
-                        var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1989-01-25")), /* () */0);
+                        var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1989-01-25")), /* () */0);
                         return Jest.Expect[/* toBe */2]("1989-01-25", Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
+                      }));
+                Jest.test("can parse a date-string as a convenience", (function () {
+                        return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                              return Person.birthday_of_string_exn("1989-01-25");
+                                            }))));
+                      }));
+                Jest.test("round-trips a string-ish birthday", (function () {
+                        var str = "1989-01-25";
+                        var date = Person.birthday_of_string_exn(str);
+                        var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(date), /* () */0);
+                        return Jest.Expect[/* toBe */2](str, Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
+                      }));
+                Jest.test("throws on a non-date birthday", (function () {
+                        return Jest.Expect[/* toThrow */18](Jest.Expect[/* expect */0]((function () {
+                                          return Person.birthday_of_string_exn("this is not a birthday");
+                                        })));
+                      }));
+                describe("Record validation", (function () {
+                        Jest.test("accepts a well-formed description", (function () {
+                                return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                                      return Person.of_string_description("Wittig", "Kachel", "Female", "Yellow", "1989-01-25");
+                                                    }))));
+                              }));
+                        return Jest.test("accepts mis-cased variant tags", (function () {
+                                      var p = Person.of_string_description("Wittig", "Kachel", "feMAlE", "yElLOW", "1989-01-25");
+                                      return Jest.Expect[/* toEqual */12](/* tuple */[
+                                                  "Wittig",
+                                                  "Kachel",
+                                                  /* Female */-322301012,
+                                                  /* Yellow */82908052,
+                                                  "1989-01-25"
+                                                ], Jest.Expect[/* expect */0](/* tuple */[
+                                                      p[/* last_name */0],
+                                                      p[/* first_name */1],
+                                                      p[/* gender */2],
+                                                      p[/* favourite_colour */3],
+                                                      Person.string_of_birthday(p)
+                                                    ]));
+                                    }));
                       }));
                 describe("Set of people", (function () {
                         Jest.test("can be created, empty", (function () {
@@ -60,8 +88,8 @@ describe("Data model", (function () {
                               }));
                         Jest.test("retrieves the correct person, even with an overloaded name", (function () {
                                 var set = Person.set_create(/* () */0);
-                                var a_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1949-03-16")), /* () */0);
-                                var another_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1990-12-25")), /* () */0);
+                                var a_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1949-03-16")), /* () */0);
+                                var another_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1990-12-25")), /* () */0);
                                 Person.set_add(set, a_person);
                                 Person.set_add(set, another_person);
                                 var result = Person.set_find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.string_of_birthday(a_person));
@@ -196,6 +224,8 @@ describe("Data model", (function () {
         return /* () */0;
       }));
 
-exports.make_birthday_exn = make_birthday_exn;
+var make_birthday = Person.birthday_of_string_exn;
+
+exports.make_birthday = make_birthday;
 exports.make_person = make_person;
 /*  Not a pure module */

@@ -17,6 +17,9 @@ type t = {
 val create : last_name:string -> first_name:string -> gender:gender ->
    favourite_colour:colour -> birthday:Js.Date.t -> t
 
+val of_string_description : last_name:string -> first_name:string -> gender:string ->
+   favourite_colour:string -> birthday:string -> t
+
 (* FIXME: BuckleScript's conversion-routines generate bare `Object` instances, with the appropriate
  *        properties, from ML records. I'd prefer to expose idiomatic instances that inherit from an
  *        exposed `Person.prototype`. *)

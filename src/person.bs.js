@@ -7,7 +7,66 @@ var $$String = require("bs-platform/lib/js/string.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
+var Js_mapperRt = require("bs-platform/lib/js/js_mapperRt.js");
 var Caml_primitive = require("bs-platform/lib/js/caml_primitive.js");
+
+var jsMapperConstantArray = /* array */[
+  /* tuple */[
+    -811299821,
+    "Neither"
+  ],
+  /* tuple */[
+    -394757225,
+    "Unspecified"
+  ],
+  /* tuple */[
+    -322301012,
+    "Female"
+  ],
+  /* tuple */[
+    858744557,
+    "Male"
+  ]
+];
+
+var jsMapperConstantArray$1 = /* array */[
+  /* tuple */[
+    -937474657,
+    "Black"
+  ],
+  /* tuple */[
+    -930446478,
+    "Indigo"
+  ],
+  /* tuple */[
+    -588596599,
+    "White"
+  ],
+  /* tuple */[
+    -95344882,
+    "Orange"
+  ],
+  /* tuple */[
+    4100401,
+    "Red"
+  ],
+  /* tuple */[
+    82908052,
+    "Yellow"
+  ],
+  /* tuple */[
+    561310623,
+    "Violet"
+  ],
+  /* tuple */[
+    737308346,
+    "Blue"
+  ],
+  /* tuple */[
+    756711075,
+    "Green"
+  ]
+];
 
 function string_of_birthday(person) {
   var iso8601 = person[/* birthday */4].toISOString();
@@ -16,6 +75,16 @@ function string_of_birthday(person) {
     return Pervasives.failwith("Unreachable");
   } else {
     return match[0];
+  }
+}
+
+function birthday_of_string_exn(iso8601) {
+  var date = new Date(iso8601);
+  var flo = date.valueOf();
+  if (isNaN(flo)) {
+    return Pervasives.failwith("Unparsable date");
+  } else {
+    return date;
   }
 }
 
@@ -37,6 +106,29 @@ function create(last_name, first_name, gender, favourite_colour, birthday) {
           /* favourite_colour */favourite_colour,
           /* birthday */birthday
         ];
+}
+
+function of_string_description(last_name, first_name, gender, favourite_colour, birthday) {
+  if (last_name === "") {
+    return Pervasives.failwith("last_name cannot be empty");
+  } else if (first_name === "") {
+    return Pervasives.failwith("first_name cannot be empty");
+  } else {
+    var param = $$String.capitalize($$String.lowercase(gender));
+    var match = Js_mapperRt.revSearch(4, jsMapperConstantArray, param);
+    var gender$prime = match !== undefined ? match : Pervasives.failwith(" \'" + (String(gender) + "\' is not a recognized gender. good job! "));
+    var param$1 = $$String.capitalize($$String.lowercase(favourite_colour));
+    var match$1 = Js_mapperRt.revSearch(9, jsMapperConstantArray$1, param$1);
+    var favourite_colour$prime = match$1 !== undefined ? match$1 : Pervasives.failwith(" \'" + (String(favourite_colour) + "\' is not a recognized colour. good job! "));
+    var birthday$prime = birthday_of_string_exn(birthday);
+    return /* record */[
+            /* last_name */last_name,
+            /* first_name */first_name,
+            /* gender */gender$prime,
+            /* favourite_colour */favourite_colour$prime,
+            /* birthday */birthday$prime
+          ];
+  }
 }
 
 function of_object(obj) {
@@ -124,6 +216,7 @@ function array_of_set(set, sorts) {
 }
 
 exports.create = create;
+exports.of_string_description = of_string_description;
 exports.of_object = of_object;
 exports.to_object = to_object;
 exports.set_create = set_create;
@@ -131,4 +224,5 @@ exports.set_add = set_add;
 exports.set_find_exn = set_find_exn;
 exports.array_of_set = array_of_set;
 exports.string_of_birthday = string_of_birthday;
+exports.birthday_of_string_exn = birthday_of_string_exn;
 /* No side effect */

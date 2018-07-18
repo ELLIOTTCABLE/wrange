@@ -22,6 +22,42 @@ describe "Data model" begin fun ()->
          expect (Person.string_of_birthday person) |> (toBe "1989-01-25")
       );
 
+      test "can parse a date-string as a convenience" Expect.(fun ()->
+         expect (fun _ ->
+            Person.birthday_of_string_exn "1989-01-25"
+         ) |> not_ |> toThrow
+      );
+
+      test "round-trips a string-ish birthday" Expect.(fun ()->
+         let str = "1989-01-25" in
+         let date = Person.birthday_of_string_exn str in
+         let person = make_person ~birthday:date () in
+         expect (Person.string_of_birthday person) |> (toBe str)
+      );
+
+      test "throws on a non-date birthday" Expect.(fun ()->
+         expect (fun _ ->
+            Person.birthday_of_string_exn "this is not a birthday"
+         ) |> toThrow
+      );
+
+      describe "Record validation" begin fun ()->
+         test "accepts a well-formed description" Expect.(fun ()->
+            expect (fun _ ->
+               Person.of_string_description ~last_name:"Wittig" ~first_name:"Kachel"
+                  ~gender:"Female" ~favourite_colour:"Yellow" ~birthday:"1989-01-25"
+            ) |> not_ |> toThrow
+         );
+
+         test "accepts mis-cased variant tags" Expect.(fun ()->
+            let (p:Person.t) = Person.of_string_description ~last_name:"Wittig" ~first_name:"Kachel"
+               ~gender:"feMAlE" ~favourite_colour:"yElLOW" ~birthday:"1989-01-25" in
+            expect (p.last_name, p.first_name,
+               p.gender, p.favourite_colour, Person.string_of_birthday p)
+            |> toEqual ("Wittig", "Kachel", `Female, `Yellow, "1989-01-25")
+         );
+      end;
+
       describe "Set of people" begin fun ()->
          test "can be created, empty" Expect.(fun ()->
             expect (fun _ ->

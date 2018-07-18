@@ -80,3 +80,8 @@ Going with Express, as it's a quick and easy solution. More to learn on the go, 
 used it in years, and remember basically nothing ...
 
 Storing the set of names is going to be a hashmap; I think I'll hash over `(full name, birthdate)`.
+
+----
+
+Literally just spent about six hours of my life on a missing `+` in a character-class. Oh my holy
+lord.

@@ -36,9 +36,25 @@ let nobody () =
    { last_name = ""; first_name = ""; gender = `Unspecified;
      favourite_colour = `Black; birthday = Js.Date.make () }
 
+let titlecase str = str |> String.lowercase |> String.capitalize
 
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
    { last_name; first_name; gender; favourite_colour; birthday }
+
+(* TODO: These errors could be, should be, a lot more elaborate. *)
+let of_string_description ~last_name ~first_name ~gender ~favourite_colour ~birthday =
+   if last_name = "" then failwith "last_name cannot be empty" else
+   if first_name = "" then failwith "first_name cannot be empty" else
+   let gender' = match gender |> titlecase |> genderFromJs with
+   | Some gender -> gender
+   | None -> failwith {j| '$(gender)' is not a recognized gender. good job! |j}
+   and favourite_colour' = match favourite_colour |> titlecase |> colourFromJs with
+   | Some colour -> colour
+   | None -> failwith {j| '$(favourite_colour)' is not a recognized colour. good job! |j}
+   and birthday' = birthday_of_string_exn birthday
+   in
+   { last_name; first_name; gender = gender';
+      favourite_colour = favourite_colour'; birthday = birthday' }
 
 let of_object obj = tFromJs obj
 
