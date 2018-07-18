@@ -79,7 +79,53 @@ describe("Data model", (function () {
                                 var result = Person.array_of_set(set, /* [] */0);
                                 return Jest.Expect[/* toBe */2](2, Jest.Expect[/* expect */0](result.length));
                               }));
-                        return Jest.test("can be sorted by name", (function () {
+                        Jest.test("can be sorted by name", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
+                                var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
+                                Person.set_add(set, a_person);
+                                Person.set_add(set, another_person);
+                                Person.set_add(set, last_person);
+                                var result = Person.array_of_set(set, /* :: */[
+                                      /* tuple */[
+                                        /* First */1,
+                                        /* Ascending */0
+                                      ],
+                                      /* [] */0
+                                    ]);
+                                return Jest.Expect[/* toEqual */12](/* array */[
+                                            "Andy",
+                                            "Kelly",
+                                            "Ranger"
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
+                                                      return pers[/* first_name */1];
+                                                    }), result)));
+                              }));
+                        Jest.test("can be sorted in inverted order", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
+                                var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
+                                Person.set_add(set, a_person);
+                                Person.set_add(set, another_person);
+                                Person.set_add(set, last_person);
+                                var result = Person.array_of_set(set, /* :: */[
+                                      /* tuple */[
+                                        /* First */1,
+                                        /* Descending */1
+                                      ],
+                                      /* [] */0
+                                    ]);
+                                return Jest.Expect[/* toEqual */12](/* array */[
+                                            "Ranger",
+                                            "Kelly",
+                                            "Andy"
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
+                                                      return pers[/* first_name */1];
+                                                    }), result)));
+                              }));
+                        return Jest.test("accepts multiple keys to sort by, and ignores extraneous ones", (function () {
                                       var set = Hashtbl.create(undefined, 100);
                                       var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
                                       var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
@@ -92,7 +138,13 @@ describe("Data model", (function () {
                                               /* First */1,
                                               /* Ascending */0
                                             ],
-                                            /* [] */0
+                                            /* :: */[
+                                              /* tuple */[
+                                                /* Last */0,
+                                                /* Ascending */0
+                                              ],
+                                              /* [] */0
+                                            ]
                                           ]);
                                       return Jest.Expect[/* toEqual */12](/* array */[
                                                   "Andy",

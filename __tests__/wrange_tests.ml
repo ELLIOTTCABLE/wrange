@@ -84,6 +84,32 @@ describe "Data model" begin fun ()->
             expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
+
+         test "can be sorted in inverted order" Expect.(fun ()->
+            let set = Person.set_create ()
+            and a_person = make_person ~first_name:"Kelly" ()
+            and another_person = make_person ~first_name:"Andy" ()
+            and last_person = make_person ~first_name:"Ranger" () in
+            Person.set_add set a_person;
+            Person.set_add set another_person;
+            Person.set_add set last_person;
+            let result = Person.(array_of_set set ~sorts:[First, Descending]) in
+            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            |> (toEqual [|"Ranger"; "Kelly"; "Andy"|])
+         );
+
+         test "accepts multiple keys to sort by, and ignores extraneous ones" Expect.(fun ()->
+            let set = Person.set_create ()
+            and a_person = make_person ~first_name:"Kelly" ()
+            and another_person = make_person ~first_name:"Andy" ()
+            and last_person = make_person ~first_name:"Ranger" () in
+            Person.set_add set a_person;
+            Person.set_add set another_person;
+            Person.set_add set last_person;
+            let result = Person.(array_of_set set ~sorts:[First, Ascending; Last, Ascending]) in
+            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
+         );
       end
    end
 end
