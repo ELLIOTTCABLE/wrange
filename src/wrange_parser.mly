@@ -1,4 +1,4 @@
-%token <string> SEP
+%token SEP
 %token <string> VAL
 %token NL
 
@@ -9,24 +9,15 @@
 %%
 
 doc:
-   | EOF              { [] }
-   | it = rev_records { it }
+   | it = rev_records; EOF { it }
    ;
 
 rev_records:
+           | rest = rev_records; re = record; NL  { re :: rest }
            | (* base-case: empty *) { [] }
-           | rest = rev_records; record; NL  { record :: rest }
-           | rest = rev_records; record; EOF { record :: rest }
            ;
 
 record:
-   last_name = name_field; SEP; first_name = name_field; SEP; gender = gender_field; SEP;
-   favourite_colour = colour_field; SEP; birthday = date_field
-   { {last_name; first_name; gender; favourite_colour; birthday} }
-
-name_field: str = VAL { str }
-
-gender_field:
-            | VAL("male" { Person.Male }
-            | VAL "female" { Person.Female }
-            ;
+   last_name = VAL; SEP; first_name = VAL; SEP; gender = VAL; SEP;
+   favourite_colour = VAL; SEP; birthday = VAL
+   { Person.of_string_description ~last_name ~first_name ~gender ~favourite_colour ~birthday }

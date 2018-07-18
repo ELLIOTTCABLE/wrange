@@ -156,4 +156,34 @@ describe "Data model" begin fun ()->
          );
       end
    end
-end
+end;
+
+describe "Parsing" begin fun ()->
+   let parse = Wrange.parse_print_errors in
+
+   test "handles an empty document" Expect.(fun ()->
+      expect (fun _ ->
+         parse ""
+      ) |> not_ |> toThrow
+   );
+
+   test "returns an empty list for an empty document" Expect.(fun ()->
+      expect (parse "") |> (toBe [])
+   );
+
+   test "handles a single record" Expect.(fun ()->
+      let results = parse "Wittig|Kachel|Female|Yellow|1989-01-25\n" in
+      expect (List.length results) |> (toBe 1)
+   );
+
+   (* test "handles a single record" Expect.(fun ()-> *)
+   (*    let (result : Person.t) = parse "Wittig | Kachel | female | yellow | 1989-01-25" in *)
+   (*    expect result |> (toEqual { *)
+   (*       last_name = "Kachel"; *)
+   (*       first_name = "Wittig"; *)
+   (*       gender = `Female; *)
+   (*       favourite_colour = `Yellow; *)
+   (*       birthday = make_birthday "1989-01-25" *)
+   (*    }) *)
+   (* ); *)
+end;

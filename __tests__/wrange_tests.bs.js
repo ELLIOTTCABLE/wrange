@@ -4,6 +4,7 @@ var Jest = require("@glennsl/bs-jest/src/jest.js");
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Person = require("../src/person.bs.js");
+var Wrange = require("../src/wrange.bs.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function make_person($staropt$star, $staropt$star$1, $staropt$star$2, $staropt$star$3, $staropt$star$4, _) {
@@ -222,6 +223,21 @@ describe("Data model", (function () {
                 return /* () */0;
               }));
         return /* () */0;
+      }));
+
+describe("Parsing", (function () {
+        Jest.test("handles an empty document", (function () {
+                return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                      return Wrange.parse_print_errors("");
+                                    }))));
+              }));
+        Jest.test("returns an empty list for an empty document", (function () {
+                return Jest.Expect[/* toBe */2](/* [] */0, Jest.Expect[/* expect */0](Wrange.parse_print_errors("")));
+              }));
+        return Jest.test("handles a single record", (function () {
+                      var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25\n");
+                      return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+                    }));
       }));
 
 var make_birthday = Person.birthday_of_string_exn;
