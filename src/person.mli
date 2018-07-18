@@ -18,3 +18,5 @@ val create : last_name:string -> first_name:string -> gender:gender ->
  *        exposed `Person.prototype`. *)
 val of_object : abs_person -> person
 val to_object : person -> abs_person
+
+val string_of_birthday : person -> string

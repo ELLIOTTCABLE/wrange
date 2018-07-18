@@ -78,3 +78,5 @@ Short any direction to the contrary, I guess I'll just build it into the CLI int
 
 Going with Express, as it's a quick and easy solution. More to learn on the go, though, as I haven't
 used it in years, and remember basically nothing ...
+
+Storing the set of names is going to be a hashmap; I think I'll hash over `(full name, birthdate)`.

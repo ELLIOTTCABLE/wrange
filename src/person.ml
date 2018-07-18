@@ -12,6 +12,14 @@ type person = {
 } [@@bs.deriving {jsConverter = newType}]
 type t = person
 
+
+let string_of_birthday person =
+   let iso8601 = Js.Date.toISOString person.birthday in
+   match Js.String.split "T" iso8601 with
+   | [| date; _time |] -> date
+   | _ -> failwith "Unreachable"
+
+
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
    { last_name; first_name; gender; favourite_colour; birthday }
 
