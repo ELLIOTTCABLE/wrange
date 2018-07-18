@@ -1,3 +1,6 @@
+type sort_key = Last | First | Gender | Birthday
+type sort_order = Ascending | Descending
+
 type gender = Male | Female | Neither | Unspecified
 type colour = Black | White | Red | Orange | Yellow | Green | Blue | Indigo | Violet
 

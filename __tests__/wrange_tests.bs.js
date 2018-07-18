@@ -62,16 +62,12 @@ describe("Data model", (function () {
                               }));
                         return Jest.test("retrieves the correct person, even with an overloaded name", (function () {
                                       var set = Hashtbl.create(undefined, 100);
-                                      var first_name = "Bob";
-                                      var last_name = "Jones";
-                                      var a = make_birthday_exn("1949-03-16");
-                                      var b = make_birthday_exn("1990-12-25");
-                                      var a_bob = make_person(last_name, first_name, undefined, undefined, Js_primitive.some(a), /* () */0);
-                                      var b_bob = make_person(last_name, first_name, undefined, undefined, Js_primitive.some(b), /* () */0);
-                                      Person.set_add(set, a_bob);
-                                      Person.set_add(set, b_bob);
-                                      var result = Person.set_find_exn(set, last_name, first_name, Person.string_of_birthday(a_bob));
-                                      return Jest.Expect[/* toBe */2](a_bob, Jest.Expect[/* expect */0](result));
+                                      var a_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1949-03-16")), /* () */0);
+                                      var another_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1990-12-25")), /* () */0);
+                                      Person.set_add(set, a_person);
+                                      Person.set_add(set, another_person);
+                                      var result = Person.set_find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.string_of_birthday(a_person));
+                                      return Jest.Expect[/* toBe */2](a_person, Jest.Expect[/* expect */0](result));
                                     }));
                       }));
                 return /* () */0;

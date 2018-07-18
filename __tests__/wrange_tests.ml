@@ -53,17 +53,13 @@ describe "Data model" begin fun ()->
 
          test "retrieves the correct person, even with an overloaded name" Expect.(fun ()->
             let set = Person.set_create () in
-            let first_name = "Bob" and last_name = "Jones"
-            and a = (make_birthday_exn "1949-03-16") and b = (make_birthday_exn "1990-12-25") in
-            let a_bob = make_person ~last_name ~first_name
-               ~birthday:a () in
-            let b_bob = make_person ~last_name ~first_name
-               ~birthday:b () in
-            Person.set_add set a_bob;
-            Person.set_add set b_bob;
-            let result = Person.set_find_exn set last_name first_name
-               (Person.string_of_birthday a_bob) in
-            expect result |> (toBe a_bob)
+            let a_person = make_person ~birthday:(make_birthday_exn "1949-03-16") () in
+            let another_person = make_person ~birthday:(make_birthday_exn "1990-12-25") () in
+            Person.set_add set a_person;
+            Person.set_add set another_person;
+            let result = Person.set_find_exn set a_person.last_name a_person.first_name
+               (Person.string_of_birthday a_person) in
+            expect result |> (toBe a_person)
          );
       end
    end
