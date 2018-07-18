@@ -2,6 +2,7 @@
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
 var Person = require("../src/person.bs.js");
+var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
@@ -31,13 +32,49 @@ describe("Data model", (function () {
         describe("Person", (function () {
                 Jest.test("can be created", (function () {
                         return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
-                                              return Person.create("Wittig", "Kachel", /* Female */1, /* Yellow */4, make_birthday_exn("1989-01-25"));
+                                              Person.create("Wittig", "Kachel", /* Female */1, /* Yellow */4, make_birthday_exn("1989-01-25"));
+                                              return /* () */0;
                                             }))));
                       }));
-                return Jest.test("can produce a string for their birthday", (function () {
-                              var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1989-01-25")), /* () */0);
-                              return Jest.Expect[/* toBe */2]("1989-01-25", Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
-                            }));
+                Jest.test("can produce a string for their birthday", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(make_birthday_exn("1989-01-25")), /* () */0);
+                        return Jest.Expect[/* toBe */2]("1989-01-25", Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
+                      }));
+                describe("Set of people", (function () {
+                        Jest.test("can be created, empty", (function () {
+                                return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                                      return Hashtbl.create(undefined, 100);
+                                                    }))));
+                              }));
+                        Jest.test("can be added to", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                                return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                                      return Person.set_add(set, person);
+                                                    }))));
+                              }));
+                        Jest.test("can be retrieved from", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                                Person.set_add(set, person);
+                                var result = Person.set_find_exn(set, person[/* last_name */0], person[/* first_name */1], Person.string_of_birthday(person));
+                                return Jest.Expect[/* toBe */2](person, Jest.Expect[/* expect */0](result));
+                              }));
+                        return Jest.test("retrieves the correct person, even with an overloaded name", (function () {
+                                      var set = Hashtbl.create(undefined, 100);
+                                      var first_name = "Bob";
+                                      var last_name = "Jones";
+                                      var a = make_birthday_exn("1949-03-16");
+                                      var b = make_birthday_exn("1990-12-25");
+                                      var a_bob = make_person(last_name, first_name, undefined, undefined, Js_primitive.some(a), /* () */0);
+                                      var b_bob = make_person(last_name, first_name, undefined, undefined, Js_primitive.some(b), /* () */0);
+                                      Person.set_add(set, a_bob);
+                                      Person.set_add(set, b_bob);
+                                      var result = Person.set_find_exn(set, last_name, first_name, Person.string_of_birthday(a_bob));
+                                      return Jest.Expect[/* toBe */2](a_bob, Jest.Expect[/* expect */0](result));
+                                    }));
+                      }));
+                return /* () */0;
               }));
         return /* () */0;
       }));

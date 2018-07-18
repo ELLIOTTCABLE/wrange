@@ -9,6 +9,7 @@ type person = {
    favourite_colour : colour;
    birthday : Js.Date.t;
 }
+type set
 
 val create : last_name:string -> first_name:string -> gender:gender ->
    favourite_colour:colour -> birthday:Js.Date.t -> person
@@ -18,5 +19,9 @@ val create : last_name:string -> first_name:string -> gender:gender ->
  *        exposed `Person.prototype`. *)
 val of_object : abs_person -> person
 val to_object : person -> abs_person
+
+val set_create : unit -> set
+val set_add : set -> person -> unit
+val set_find_exn : set -> string -> string -> string -> person
 
 val string_of_birthday : person -> string

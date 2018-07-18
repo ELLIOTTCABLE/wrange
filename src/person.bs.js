@@ -1,5 +1,6 @@
 'use strict';
 
+var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 function string_of_birthday(person) {
@@ -47,8 +48,35 @@ function to_object(p) {
         };
 }
 
+function set_create() {
+  return Hashtbl.create(undefined, 100);
+}
+
+function set_add(set, person) {
+  var key_000 = person[/* last_name */0];
+  var key_001 = person[/* first_name */1];
+  var key_002 = string_of_birthday(person);
+  var key = /* tuple */[
+    key_000,
+    key_001,
+    key_002
+  ];
+  return Hashtbl.replace(set, key, person);
+}
+
+function set_find_exn(set, last, first, birthday) {
+  return Hashtbl.find(set, /* tuple */[
+              last,
+              first,
+              birthday
+            ]);
+}
+
 exports.create = create;
 exports.of_object = of_object;
 exports.to_object = to_object;
+exports.set_create = set_create;
+exports.set_add = set_add;
+exports.set_find_exn = set_find_exn;
 exports.string_of_birthday = string_of_birthday;
 /* No side effect */

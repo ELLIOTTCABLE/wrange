@@ -18,7 +18,7 @@ describe "Data model" begin fun ()->
       test "can be created" Expect.(fun ()->
          expect (fun _ ->
             Person.create ~first_name:"Kachel" ~last_name:"Wittig" ~gender:Person.Female
-               ~favourite_colour:Person.Yellow ~birthday:(make_birthday_exn "1989-01-25")
+               ~favourite_colour:Person.Yellow ~birthday:(make_birthday_exn "1989-01-25") |> ignore
          ) |> not_ |> toThrow
       );
 
@@ -26,5 +26,45 @@ describe "Data model" begin fun ()->
          let person = make_person ~birthday:(make_birthday_exn "1989-01-25") () in
          expect (Person.string_of_birthday person) |> (toBe "1989-01-25")
       );
+
+      describe "Set of people" begin fun ()->
+         test "can be created, empty" Expect.(fun ()->
+            expect (fun _ ->
+               Person.set_create ()
+            ) |> not_ |> toThrow
+         );
+
+         test "can be added to" Expect.(fun ()->
+            let set = Person.set_create () in
+            let person = make_person () in
+            expect (fun _ ->
+               Person.set_add set person
+            ) |> not_ |> toThrow
+         );
+
+         test "can be retrieved from" Expect.(fun ()->
+            let set = Person.set_create () in
+            let person = make_person () in
+            Person.set_add set person;
+            let result = Person.set_find_exn set person.last_name person.first_name
+               (Person.string_of_birthday person) in
+            expect result |> (toBe person)
+         );
+
+         test "retrieves the correct person, even with an overloaded name" Expect.(fun ()->
+            let set = Person.set_create () in
+            let first_name = "Bob" and last_name = "Jones"
+            and a = (make_birthday_exn "1949-03-16") and b = (make_birthday_exn "1990-12-25") in
+            let a_bob = make_person ~last_name ~first_name
+               ~birthday:a () in
+            let b_bob = make_person ~last_name ~first_name
+               ~birthday:b () in
+            Person.set_add set a_bob;
+            Person.set_add set b_bob;
+            let result = Person.set_find_exn set last_name first_name
+               (Person.string_of_birthday a_bob) in
+            expect result |> (toBe a_bob)
+         );
+      end
    end
 end
