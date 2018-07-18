@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "src/exports.js",
   "scripts": {
-    "test": "npm run build && jest --coverage",
+    "test": "npm run build && jest --verbose --coverage",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "start": "npm run build && node src/server.bs.js",
@@ -25,5 +25,8 @@
     "bs-platform": "^4.0.0",
     "nodemon": "^1.18.3",
     "ocaml-language-server": "^1.0.35"
+  },
+  "jest": {
+     "coverageReporters": ["json", "lcov", "text", "html"]
   }
 }
