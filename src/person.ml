@@ -82,5 +82,5 @@ let array_of_set (set:set) ~sorts =
       i := !i + 1
    end
    |. Hashtbl.iter set;
-   List.iteri (lexicographic_step arr) sorts;
+   List.iteri (lexicographic_step arr) (List.rev sorts);
    arr

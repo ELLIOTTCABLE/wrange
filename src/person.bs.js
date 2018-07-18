@@ -121,7 +121,7 @@ function array_of_set(set, sorts) {
                 return compare(key, param, param$1);
               });
           return Curry._2(sort, compare$1, arr$1);
-        }), sorts);
+        }), List.rev(sorts));
   return arr;
 }
 

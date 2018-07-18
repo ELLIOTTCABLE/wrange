@@ -110,6 +110,19 @@ describe "Data model" begin fun ()->
             expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
+
+         test "sorts lexicographically by secondary keys in the case of conflicts" Expect.(fun ()->
+            let set = Person.set_create () in
+            List.iter (Person.set_add set) [
+               make_person ~first_name:"Kachel" ~last_name:"Wittig" ();
+               make_person ~first_name:"Kelly" ~last_name:"Awesomedottir" ();
+               make_person ~first_name:"Andy" ~last_name:"Awesomedottir" ();
+               make_person ~first_name:"Ranger" ~last_name:"Awesomedottir" ();
+            ];
+            let result = Person.(array_of_set set ~sorts:[Last, Ascending; First, Ascending]) in
+            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            |> (toEqual [|"Andy"; "Kelly"; "Ranger"; "Kachel"|])
+         );
       end
    end
 end

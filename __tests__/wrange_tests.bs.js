@@ -1,6 +1,7 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
+var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Person = require("../src/person.bs.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
@@ -125,22 +126,60 @@ describe("Data model", (function () {
                                                       return pers[/* first_name */1];
                                                     }), result)));
                               }));
-                        return Jest.test("accepts multiple keys to sort by, and ignores extraneous ones", (function () {
+                        Jest.test("accepts multiple keys to sort by, and ignores extraneous ones", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
+                                var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
+                                Person.set_add(set, a_person);
+                                Person.set_add(set, another_person);
+                                Person.set_add(set, last_person);
+                                var result = Person.array_of_set(set, /* :: */[
+                                      /* tuple */[
+                                        /* First */1,
+                                        /* Ascending */0
+                                      ],
+                                      /* :: */[
+                                        /* tuple */[
+                                          /* Last */0,
+                                          /* Ascending */0
+                                        ],
+                                        /* [] */0
+                                      ]
+                                    ]);
+                                return Jest.Expect[/* toEqual */12](/* array */[
+                                            "Andy",
+                                            "Kelly",
+                                            "Ranger"
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
+                                                      return pers[/* first_name */1];
+                                                    }), result)));
+                              }));
+                        return Jest.test("sorts lexicographically by secondary keys in the case of conflicts", (function () {
                                       var set = Hashtbl.create(undefined, 100);
-                                      var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
-                                      var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
-                                      var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
-                                      Person.set_add(set, a_person);
-                                      Person.set_add(set, another_person);
-                                      Person.set_add(set, last_person);
+                                      List.iter((function (param) {
+                                              return Person.set_add(set, param);
+                                            }), /* :: */[
+                                            make_person("Wittig", "Kachel", undefined, undefined, undefined, /* () */0),
+                                            /* :: */[
+                                              make_person("Awesomedottir", "Kelly", undefined, undefined, undefined, /* () */0),
+                                              /* :: */[
+                                                make_person("Awesomedottir", "Andy", undefined, undefined, undefined, /* () */0),
+                                                /* :: */[
+                                                  make_person("Awesomedottir", "Ranger", undefined, undefined, undefined, /* () */0),
+                                                  /* [] */0
+                                                ]
+                                              ]
+                                            ]
+                                          ]);
                                       var result = Person.array_of_set(set, /* :: */[
                                             /* tuple */[
-                                              /* First */1,
+                                              /* Last */0,
                                               /* Ascending */0
                                             ],
                                             /* :: */[
                                               /* tuple */[
-                                                /* Last */0,
+                                                /* First */1,
                                                 /* Ascending */0
                                               ],
                                               /* [] */0
@@ -149,7 +188,8 @@ describe("Data model", (function () {
                                       return Jest.Expect[/* toEqual */12](/* array */[
                                                   "Andy",
                                                   "Kelly",
-                                                  "Ranger"
+                                                  "Ranger",
+                                                  "Kachel"
                                                 ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
                                                             return pers[/* first_name */1];
                                                           }), result)));
