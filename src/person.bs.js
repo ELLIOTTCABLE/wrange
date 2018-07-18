@@ -3,19 +3,17 @@
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var $$String = require("bs-platform/lib/js/string.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_primitive = require("bs-platform/lib/js/caml_primitive.js");
-var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 function string_of_birthday(person) {
   var iso8601 = person[/* birthday */4].toISOString();
   var match = iso8601.split("T");
   if (match.length !== 2) {
-    throw [
-          Caml_builtin_exceptions.failure,
-          "Unreachable"
-        ];
+    return Pervasives.failwith("Unreachable");
   } else {
     return match[0];
   }
@@ -66,9 +64,9 @@ function to_object(p) {
 function compare(key, a, b) {
   switch (key) {
     case 0 : 
-        return Caml_primitive.caml_string_compare(a[/* last_name */0], b[/* last_name */0]);
+        return $$String.compare(a[/* last_name */0], b[/* last_name */0]);
     case 1 : 
-        return Caml_primitive.caml_string_compare(a[/* first_name */1], b[/* first_name */1]);
+        return $$String.compare(a[/* first_name */1], b[/* first_name */1]);
     case 2 : 
         return Caml_primitive.caml_int_compare(a[/* gender */2], b[/* gender */2]);
     case 3 : 
@@ -103,7 +101,7 @@ function set_find_exn(set, last, first, birthday) {
 
 function array_of_set(set, sorts) {
   var i = /* record */[/* contents */0];
-  var arr = Caml_array.caml_make_vect(set[/* size */0], nobody(/* () */0));
+  var arr = Caml_array.caml_make_vect(Hashtbl.length(set), nobody(/* () */0));
   Hashtbl.iter((function (_, person) {
           Caml_array.caml_array_set(arr, i[0], person);
           i[0] = i[0] + 1 | 0;

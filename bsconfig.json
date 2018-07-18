@@ -18,8 +18,7 @@
   ],
   "bsc-flags": [
     "-bs-super-errors",
-    "-bs-no-version-header",
-    "-bs-cross-module-opt"
+    "-bs-no-version-header"
   ],
   "warnings": {
     "error" : "+101"
