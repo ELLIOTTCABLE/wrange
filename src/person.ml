@@ -36,6 +36,15 @@ let of_object obj = personFromJs obj
 
 let to_object p = personToJs p
 
+let compare key a b =
+   match key with
+   | Last  -> String.compare a.last_name b.last_name
+   | First -> String.compare a.first_name b.first_name
+   | Gender -> Pervasives.compare a.gender b.gender
+   (* FIXME: Where the hell is the Float module, in BS? *)
+   (* | Birthday -> Float.compare ... *)
+   | Birthday -> Pervasives.compare (Js.Date.valueOf a.birthday) (Js.Date.valueOf b.birthday)
+
 
 (* NOTE: I'd really prefer to make this a submodule, but ... BuckleScript ... -_-
  *       <https://github.com/BuckleScript/bucklescript/issues/2948> *)
@@ -50,14 +59,28 @@ let set_find_exn set last first birthday =
    Hashtbl.find set (last, first, birthday)
 
 
+(* A helper to sort over the given array that uses heap-sort for the lexicographically-least
+ * ordering (and often, only ordering); but then uses a stable merge-sort for subsequent
+ * reorderings. *)
+let lexicographic_step arr i (key, order) =
+   let sort = if i = 0 then Array.fast_sort else Array.stable_sort in
+   let compare = match order with
+   | Ascending -> compare key
+   | Descending -> (fun a b -> ~-(compare key a b))
+   in
+   sort compare arr
+
 (* FIXME: First pass. Needs optimization.
+ * FIXME: Horrific, imperative, jump-off-a-bridge-before-reading implementation.
  * FIXME: There's *gotta* be an Array.of_seq or Hashtbl.to_array implementation I can gank,
  *        somewhere. Hate rolling my own for super-generic code like this.*)
 let array_of_set (set:set) ~sorts =
    let i = ref 0 in
    let arr = Array.make (Hashtbl.length set) @@ nobody () in
-   Hashtbl.iter begin fun _key person ->
+   begin fun _key person ->
       arr.(!i) <- person;
       i := !i + 1
-   end set;
+   end
+   |. Hashtbl.iter set;
+   List.iteri (lexicographic_step arr) sorts;
    arr

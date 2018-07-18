@@ -68,8 +68,21 @@ describe "Data model" begin fun ()->
             and another_person = make_person ~first_name:"Andy" () in
             Person.set_add set a_person;
             Person.set_add set another_person;
-            let arr = Person.array_of_set set ~sorts:[] in
-            expect (Array.length arr) |> (toBe 2)
+            let result = Person.array_of_set set ~sorts:[] in
+            expect (Array.length result) |> (toBe 2)
+         );
+
+         test "can be sorted by name" Expect.(fun ()->
+            let set = Person.set_create ()
+            and a_person = make_person ~first_name:"Kelly" ()
+            and another_person = make_person ~first_name:"Andy" ()
+            and last_person = make_person ~first_name:"Ranger" () in
+            Person.set_add set a_person;
+            Person.set_add set another_person;
+            Person.set_add set last_person;
+            let result = Person.(array_of_set set ~sorts:[First, Ascending]) in
+            expect (Array.map (fun (pers:Person.person) -> pers.first_name) result)
+            |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
       end
    end

@@ -1,6 +1,7 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
+var $$Array = require("bs-platform/lib/js/array.js");
 var Person = require("../src/person.bs.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
@@ -69,14 +70,37 @@ describe("Data model", (function () {
                                 var result = Person.set_find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.string_of_birthday(a_person));
                                 return Jest.Expect[/* toBe */2](a_person, Jest.Expect[/* expect */0](result));
                               }));
-                        return Jest.test("can be folded into a array", (function () {
+                        Jest.test("can be folded into a array", (function () {
+                                var set = Hashtbl.create(undefined, 100);
+                                var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
+                                var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                Person.set_add(set, a_person);
+                                Person.set_add(set, another_person);
+                                var result = Person.array_of_set(set, /* [] */0);
+                                return Jest.Expect[/* toBe */2](2, Jest.Expect[/* expect */0](result.length));
+                              }));
+                        return Jest.test("can be sorted by name", (function () {
                                       var set = Hashtbl.create(undefined, 100);
                                       var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
                                       var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                      var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
                                       Person.set_add(set, a_person);
                                       Person.set_add(set, another_person);
-                                      var arr = Person.array_of_set(set, /* [] */0);
-                                      return Jest.Expect[/* toBe */2](2, Jest.Expect[/* expect */0](arr.length));
+                                      Person.set_add(set, last_person);
+                                      var result = Person.array_of_set(set, /* :: */[
+                                            /* tuple */[
+                                              /* First */1,
+                                              /* Ascending */0
+                                            ],
+                                            /* [] */0
+                                          ]);
+                                      return Jest.Expect[/* toEqual */12](/* array */[
+                                                  "Andy",
+                                                  "Kelly",
+                                                  "Ranger"
+                                                ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
+                                                            return pers[/* first_name */1];
+                                                          }), result)));
                                     }));
                       }));
                 return /* () */0;

@@ -1,7 +1,11 @@
 'use strict';
 
+var List = require("bs-platform/lib/js/list.js");
+var $$Array = require("bs-platform/lib/js/array.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Caml_primitive = require("bs-platform/lib/js/caml_primitive.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 function string_of_birthday(person) {
@@ -59,6 +63,20 @@ function to_object(p) {
         };
 }
 
+function compare(key, a, b) {
+  switch (key) {
+    case 0 : 
+        return Caml_primitive.caml_string_compare(a[/* last_name */0], b[/* last_name */0]);
+    case 1 : 
+        return Caml_primitive.caml_string_compare(a[/* first_name */1], b[/* first_name */1]);
+    case 2 : 
+        return Caml_primitive.caml_int_compare(a[/* gender */2], b[/* gender */2]);
+    case 3 : 
+        return Caml_primitive.caml_float_compare(a[/* birthday */4].valueOf(), b[/* birthday */4].valueOf());
+    
+  }
+}
+
 function set_create() {
   return Hashtbl.create(undefined, 100);
 }
@@ -83,7 +101,7 @@ function set_find_exn(set, last, first, birthday) {
             ]);
 }
 
-function array_of_set(set, _) {
+function array_of_set(set, sorts) {
   var i = /* record */[/* contents */0];
   var arr = Caml_array.caml_make_vect(set[/* size */0], nobody(/* () */0));
   Hashtbl.iter((function (_, person) {
@@ -91,6 +109,19 @@ function array_of_set(set, _) {
           i[0] = i[0] + 1 | 0;
           return /* () */0;
         }), set);
+  List.iteri((function (param, param$1) {
+          var arr$1 = arr;
+          var i = param;
+          var param$2 = param$1;
+          var key = param$2[0];
+          var sort = i === 0 ? $$Array.fast_sort : $$Array.stable_sort;
+          var compare$1 = param$2[1] ? (function (a, b) {
+                return -compare(key, a, b) | 0;
+              }) : (function (param, param$1) {
+                return compare(key, param, param$1);
+              });
+          return Curry._2(sort, compare$1, arr$1);
+        }), sorts);
   return arr;
 }
 
