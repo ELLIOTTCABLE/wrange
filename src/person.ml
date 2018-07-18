@@ -25,6 +25,13 @@ let string_of_birthday person =
    | [| date; _time |] -> date
    | _ -> failwith "Unreachable"
 
+let birthday_of_string_exn iso8601 =
+   let date = Js.Date.fromString iso8601 in
+   let flo = Js.Date.valueOf date in
+   if not @@ Js.Float.isNaN flo
+   then date
+   else failwith "Unparsable date"
+
 let nobody () =
    { last_name = ""; first_name = ""; gender = `Unspecified;
      favourite_colour = `Black; birthday = Js.Date.make () }
