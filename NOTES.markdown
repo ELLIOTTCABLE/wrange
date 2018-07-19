@@ -85,3 +85,15 @@ Storing the set of names is going to be a hashmap; I think I'll hash over `(full
 
 Literally just spent about six hours of my life on a missing `+` in a character-class. Oh my holy
 lord.
+
+----
+
+Well, it's extremely late, I'm extremely tired, my partner wants to kill me, and I strongly doubt
+the average candidate puts this much time into the homework project.
+
+I'm wrapping up the HTTP server now. Making a type-sound HTTP server, even bog-standard CRUD, is ...
+a pain. At least I *know* I can knock out the CLI in under an hour ... but I still have
+documentation to write, as well as integration tests ...
+
+‘This grieved me heartily; and now I saw, though too late, the folly of beginning a work before we
+count the cost, and before we judge rightly of our own strength to go through with it.’
