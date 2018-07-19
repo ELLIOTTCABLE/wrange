@@ -50,10 +50,10 @@ describe "Data model" begin fun ()->
          );
 
          test "accepts mis-cased variant tags" Expect.(fun ()->
-            let (p:Person.t) = Person.of_string_description ~last_name:"Wittig" ~first_name:"Kachel"
+            let p = Person.of_string_description ~last_name:"Wittig" ~first_name:"Kachel"
                ~gender:"feMAlE" ~favourite_colour:"yElLOW" ~birthday:"1989-01-25" in
-            expect (p.last_name, p.first_name,
-               p.gender, p.favourite_colour, Person.string_of_birthday p)
+            expect Person.(p.last_name, p.first_name, p.gender,
+               p.favourite_colour, Person.string_of_birthday p)
             |> toEqual ("Wittig", "Kachel", `Female, `Yellow, "1989-01-25")
          );
       end;
@@ -112,7 +112,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Ascending]) in
-            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
+            expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
 
@@ -125,7 +125,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Descending]) in
-            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
+            expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Ranger"; "Kelly"; "Andy"|])
          );
 
@@ -138,7 +138,7 @@ describe "Data model" begin fun ()->
             Person.set_add set another_person;
             Person.set_add set last_person;
             let result = Person.(array_of_set set ~sorts:[First, Ascending; Last, Ascending]) in
-            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
+            expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
 
@@ -151,7 +151,7 @@ describe "Data model" begin fun ()->
                make_person ~first_name:"Ranger" ~last_name:"Awesomedottir" ();
             ];
             let result = Person.(array_of_set set ~sorts:[Last, Ascending; First, Ascending]) in
-            expect (Array.map (fun (pers:Person.t) -> pers.first_name) result)
+            expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"; "Kachel"|])
          );
       end
