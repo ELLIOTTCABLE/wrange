@@ -1,5 +1,6 @@
 'use strict';
 
+var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Lexer = require("./lexer.bs.js");
@@ -13,15 +14,17 @@ var Wrange = require("./wrange.bs.js");
 var Express = require("bs-express/src/Express.js");
 var Process = require("process");
 
-function make_success() {
+function make_success(value) {
   var json = { };
   json["status"] = "success";
+  json["value"] = value;
   return json;
 }
 
-function make_failure() {
+function make_failure(error) {
   var json = { };
   json["status"] = "failure";
+  json["error"] = error;
   return json;
 }
 
@@ -51,11 +54,7 @@ function make_parsing_failure($staropt$star, lexbuf) {
               ]),
             "%s:%d:%d"
           ]), pos[/* pos_fname */0], pos[/* pos_lnum */1], (pos[/* pos_cnum */3] - pos[/* pos_bol */2] | 0) + 1 | 0);
-  var error = "Error parsing record:\n" + (String(loc) + (" - " + (String(msg) + "")));
-  var json = { };
-  json["status"] = "failure";
-  json["error_message"] = error;
-  return json;
+  return make_failure("Error parsing record:\n" + (String(loc) + (" - " + (String(msg) + ""))));
 }
 
 function $great$great(f, g, x) {
@@ -86,8 +85,9 @@ function addPerson(_, _$1, req) {
   if (match !== undefined) {
     var lexbuf = Lexing.from_string(match);
     try {
-      Wrange.parse_buf_exn(lexbuf);
-      var partial_arg = make_success(/* () */0);
+      var people = Wrange.parse_buf_exn(lexbuf);
+      var people$prime = $$Array.map(Person.to_json, $$Array.of_list(people));
+      var partial_arg = make_success(people$prime);
       var partial_arg$1 = Express.Response[/* sendJson */3];
       var partial_arg$2 = Express.Response[/* status */9](/* Created */1);
       return (function (param) {
@@ -118,7 +118,7 @@ function addPerson(_, _$1, req) {
       }
     }
   } else {
-    var partial_arg$9 = make_failure(/* () */0);
+    var partial_arg$9 = make_failure("Body required for POST /records");
     var partial_arg$10 = Express.Response[/* sendJson */3];
     var partial_arg$11 = Express.Response[/* status */9](/* BadRequest */19);
     return (function (param) {

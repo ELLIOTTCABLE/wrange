@@ -1,21 +1,22 @@
 open Express
 
-let make_success () =
+let make_success value =
   let json = Js.Dict.empty () in
-  Js.Dict.set json "status" (Js.Json.string "success"); Js.Json.object_ json
+  Js.Dict.set json "status" (Js.Json.string "success");
+  Js.Dict.set json "value" value;
+  Js.Json.object_ json
 
-let make_failure () =
+let make_failure error =
   let json = Js.Dict.empty () in
-  Js.Dict.set json "status" (Js.Json.string "failure"); Js.Json.object_ json
+  Js.Dict.set json "status" (Js.Json.string "failure");
+  Js.Dict.set json "error" error;
+  Js.Json.object_ json
 
 let make_parsing_failure ?(msg="") lexbuf =
   let pos = Lexing.(lexbuf.lex_curr_p) in
   let loc = Printf.sprintf "%s:%d:%d" pos.pos_fname pos.pos_lnum (pos.pos_cnum - pos.pos_bol + 1) in
   let error = {j|Error parsing record:\n$loc - $msg|j} in
-  let json = Js.Dict.empty () in
-  Js.Dict.set json "status" (Js.Json.string "failure");
-  Js.Dict.set json "error_message" (Js.Json.string error);
-  Js.Json.object_ json
+  make_failure (Js.Json.string error)
 
 let (>>) f g x = x |> f |> g
 
@@ -34,13 +35,14 @@ let addPerson set _next req (* res *) =
    match Request.bodyText req with
    | None ->
          Response.status Response.StatusCode.BadRequest
-      >> Response.sendJson (make_failure ())
+      >> Response.sendJson (make_failure (Js.Json.string "Body required for POST /records"))
    | Some text ->
       let lexbuf = Lexing.from_string text in
       try begin
          let people = Wrange.parse_buf_exn lexbuf in
+         let people' = Array.of_list people |> Array.map (fun p -> Person.to_json p) in
          Response.status Response.StatusCode.Created
-         >> Response.sendJson @@ (make_success ())
+         >> Response.sendJson @@ (make_success (Js.Json.array people'))
       end with
       | Lexer.SyntaxError msg ->
          Response.status Response.StatusCode.BadRequest
@@ -48,7 +50,6 @@ let addPerson set _next req (* res *) =
       | Parser.Error ->
          Response.status Response.StatusCode.BadRequest
          >> Response.sendJson @@ make_parsing_failure lexbuf
-      (* Response.sendString text *)
 
 
 let announce port err = match err with
