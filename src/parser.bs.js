@@ -63,7 +63,7 @@ function doc(lexer, lexbuf) {
                 Caml_builtin_exceptions.assert_failure,
                 /* tuple */[
                   "parser.ml",
-                  532,
+                  544,
                   8
                 ]
               ];
@@ -85,7 +85,7 @@ function doc(lexer, lexbuf) {
                   Caml_builtin_exceptions.assert_failure,
                   /* tuple */[
                     "parser.ml",
-                    508,
+                    520,
                     16
                   ]
                 ];
@@ -105,7 +105,7 @@ function doc(lexer, lexbuf) {
                       Caml_builtin_exceptions.assert_failure,
                       /* tuple */[
                         "parser.ml",
-                        476,
+                        488,
                         24
                       ]
                     ];
@@ -125,7 +125,7 @@ function doc(lexer, lexbuf) {
                           Caml_builtin_exceptions.assert_failure,
                           /* tuple */[
                             "parser.ml",
-                            436,
+                            448,
                             32
                           ]
                         ];
@@ -145,7 +145,7 @@ function doc(lexer, lexbuf) {
                               Caml_builtin_exceptions.assert_failure,
                               /* tuple */[
                                 "parser.ml",
-                                388,
+                                400,
                                 40
                               ]
                             ];
@@ -168,33 +168,50 @@ function doc(lexer, lexbuf) {
                       }
                       var _tok$9 = _menhir_env$11[/* _menhir_token */2];
                       var exit$4 = 0;
-                      if (typeof _tok$9 === "number" && _tok$9 === 1) {
-                        var _menhir_env$12 = _menhir_discard(_menhir_env$11);
-                        var _v_001 = _menhir_stack$3[1];
-                        var _v$2 = /* :: */[
-                          _v$1,
-                          _v_001
-                        ];
-                        __v = _v$2;
-                        __menhir_stack = _menhir_stack$3[0];
-                        __menhir_env = _menhir_env$12;
-                        continue ;
+                      if (typeof _tok$9 === "number") {
+                        switch (_tok$9) {
+                          case 0 : 
+                              if (_menhir_env$11[/* _menhir_error */3]) {
+                                throw [
+                                      Caml_builtin_exceptions.assert_failure,
+                                      /* tuple */[
+                                        "parser.ml",
+                                        392,
+                                        44
+                                      ]
+                                    ];
+                              }
+                              _menhir_env$11[/* _menhir_error */3] = true;
+                              throw $$Error;
+                          case 1 : 
+                              var _menhir_env$12 = _menhir_discard(_menhir_env$11);
+                              var _v_001 = _menhir_stack$3[1];
+                              var _v$2 = /* :: */[
+                                _v$1,
+                                _v_001
+                              ];
+                              __v = _v$2;
+                              __menhir_stack = _menhir_stack$3[0];
+                              __menhir_env = _menhir_env$12;
+                              continue ;
+                          case 2 : 
+                              exit$4 = 5;
+                              break;
+                          
+                        }
                       } else {
                         exit$4 = 5;
                       }
                       if (exit$4 === 5) {
-                        if (_menhir_env$11[/* _menhir_error */3]) {
-                          throw [
-                                Caml_builtin_exceptions.assert_failure,
-                                /* tuple */[
-                                  "parser.ml",
-                                  380,
-                                  44
-                                ]
-                              ];
-                        }
-                        _menhir_env$11[/* _menhir_error */3] = true;
-                        throw $$Error;
+                        var _v_001$1 = _menhir_stack$3[1];
+                        var _v$3 = /* :: */[
+                          _v$1,
+                          _v_001$1
+                        ];
+                        __v = _v$3;
+                        __menhir_stack = _menhir_stack$3[0];
+                        __menhir_env = _menhir_env$11;
+                        continue ;
                       }
                       
                     }
@@ -207,7 +224,7 @@ function doc(lexer, lexbuf) {
                             Caml_builtin_exceptions.assert_failure,
                             /* tuple */[
                               "parser.ml",
-                              412,
+                              424,
                               36
                             ]
                           ];
@@ -226,7 +243,7 @@ function doc(lexer, lexbuf) {
                         Caml_builtin_exceptions.assert_failure,
                         /* tuple */[
                           "parser.ml",
-                          456,
+                          468,
                           28
                         ]
                       ];
@@ -245,7 +262,7 @@ function doc(lexer, lexbuf) {
                     Caml_builtin_exceptions.assert_failure,
                     /* tuple */[
                       "parser.ml",
-                      492,
+                      504,
                       20
                     ]
                   ];
@@ -264,7 +281,7 @@ function doc(lexer, lexbuf) {
                 Caml_builtin_exceptions.assert_failure,
                 /* tuple */[
                   "parser.ml",
-                  520,
+                  532,
                   12
                 ]
               ];

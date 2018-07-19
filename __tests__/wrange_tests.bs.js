@@ -234,8 +234,12 @@ describe("Parsing", (function () {
         Jest.test("returns an empty list for an empty document", (function () {
                 return Jest.Expect[/* toBe */2](/* [] */0, Jest.Expect[/* expect */0](Wrange.parse_print_errors("")));
               }));
-        return Jest.test("handles a single record", (function () {
-                      var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25\n");
+        Jest.test("recognizes a single record with a terminating newline", (function () {
+                var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25\n");
+                return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+              }));
+        return Jest.test("recognizes a single record with no terminator", (function () {
+                      var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25");
                       return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
                     }));
       }));

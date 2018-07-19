@@ -14,6 +14,7 @@ doc:
 
 rev_records:
            | rest = rev_records; re = record; NL  { re :: rest }
+           | rest = rev_records; re = record  { re :: rest }
            | (* base-case: empty *) { [] }
            ;
 

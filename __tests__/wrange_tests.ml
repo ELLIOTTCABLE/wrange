@@ -171,8 +171,13 @@ describe "Parsing" begin fun ()->
       expect (parse "") |> (toBe [])
    );
 
-   test "handles a single record" Expect.(fun ()->
+   test "recognizes a single record with a terminating newline" Expect.(fun ()->
       let results = parse "Wittig|Kachel|Female|Yellow|1989-01-25\n" in
+      expect (List.length results) |> (toBe 1)
+   );
+
+   test "recognizes a single record with no terminator" Expect.(fun ()->
+      let results = parse "Wittig|Kachel|Female|Yellow|1989-01-25" in
       expect (List.length results) |> (toBe 1)
    );
 
