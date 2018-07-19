@@ -1,5 +1,5 @@
-type sort_key = Last | First | Gender | Birthday
-type sort_order = Ascending | Descending
+type sort_key = [`Last | `First | `Gender | `Birthday] [@@bs.deriving jsConverter]
+type sort_order = [`Ascending | `Descending] [@@bs.deriving jsConverter]
 
 type gender = [`Male | `Female | `Neither | `Unspecified] [@@bs.deriving jsConverter]
 type colour = [`Black | `White | `Red | `Orange | `Yellow | `Green
@@ -62,12 +62,12 @@ let to_object p = tToJs p
 
 let compare key a b =
    match key with
-   | Last  -> String.compare a.last_name b.last_name
-   | First -> String.compare a.first_name b.first_name
-   | Gender -> Pervasives.compare a.gender b.gender
+   | `Last  -> String.compare a.last_name b.last_name
+   | `First -> String.compare a.first_name b.first_name
+   | `Gender -> Pervasives.compare a.gender b.gender
    (* FIXME: Where the hell is the Float module, in BS? *)
    (* | Birthday -> Float.compare ... *)
-   | Birthday -> Pervasives.compare (Js.Date.valueOf a.birthday) (Js.Date.valueOf b.birthday)
+   | `Birthday -> Pervasives.compare (Js.Date.valueOf a.birthday) (Js.Date.valueOf b.birthday)
 
 let of_json_exn json =
    let open Js.Json in
@@ -112,8 +112,8 @@ let set_find_exn set last first birthday =
 let lexicographic_step arr i (key, order) =
    let sort = if i = 0 then Array.fast_sort else Array.stable_sort in
    let compare = match order with
-   | Ascending -> compare key
-   | Descending -> (fun a b -> ~-(compare key a b))
+   | `Ascending -> compare key
+   | `Descending -> (fun a b -> ~-(compare key a b))
    in
    sort compare arr
 

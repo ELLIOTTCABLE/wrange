@@ -126,8 +126,8 @@ describe("Data model", (function () {
                                 Person.set_add(set, last_person);
                                 var result = Person.array_of_set(set, /* :: */[
                                       /* tuple */[
-                                        /* First */1,
-                                        /* Ascending */0
+                                        /* First */332064784,
+                                        /* Ascending */-800424520
                                       ],
                                       /* [] */0
                                     ]);
@@ -149,8 +149,8 @@ describe("Data model", (function () {
                                 Person.set_add(set, last_person);
                                 var result = Person.array_of_set(set, /* :: */[
                                       /* tuple */[
-                                        /* First */1,
-                                        /* Descending */1
+                                        /* First */332064784,
+                                        /* Descending */235215128
                                       ],
                                       /* [] */0
                                     ]);
@@ -172,13 +172,13 @@ describe("Data model", (function () {
                                 Person.set_add(set, last_person);
                                 var result = Person.array_of_set(set, /* :: */[
                                       /* tuple */[
-                                        /* First */1,
-                                        /* Ascending */0
+                                        /* First */332064784,
+                                        /* Ascending */-800424520
                                       ],
                                       /* :: */[
                                         /* tuple */[
-                                          /* Last */0,
-                                          /* Ascending */0
+                                          /* Last */847656566,
+                                          /* Ascending */-800424520
                                         ],
                                         /* [] */0
                                       ]
@@ -210,13 +210,13 @@ describe("Data model", (function () {
                                           ]);
                                       var result = Person.array_of_set(set, /* :: */[
                                             /* tuple */[
-                                              /* Last */0,
-                                              /* Ascending */0
+                                              /* Last */847656566,
+                                              /* Ascending */-800424520
                                             ],
                                             /* :: */[
                                               /* tuple */[
-                                                /* First */1,
-                                                /* Ascending */0
+                                                /* First */332064784,
+                                                /* Ascending */-800424520
                                               ],
                                               /* [] */0
                                             ]

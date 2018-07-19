@@ -157,16 +157,16 @@ function to_object(p) {
 }
 
 function compare(key, a, b) {
-  switch (key) {
-    case 0 : 
-        return $$String.compare(a[/* last_name */0], b[/* last_name */0]);
-    case 1 : 
-        return $$String.compare(a[/* first_name */1], b[/* first_name */1]);
-    case 2 : 
-        return Caml_primitive.caml_int_compare(a[/* gender */2], b[/* gender */2]);
-    case 3 : 
-        return Caml_primitive.caml_float_compare(a[/* birthday */4].valueOf(), b[/* birthday */4].valueOf());
-    
+  if (key >= 332064784) {
+    if (key >= 847656566) {
+      return $$String.compare(a[/* last_name */0], b[/* last_name */0]);
+    } else {
+      return $$String.compare(a[/* first_name */1], b[/* first_name */1]);
+    }
+  } else if (key >= -243010339) {
+    return Caml_primitive.caml_float_compare(a[/* birthday */4].valueOf(), b[/* birthday */4].valueOf());
+  } else {
+    return Caml_primitive.caml_int_compare(a[/* gender */2], b[/* gender */2]);
   }
 }
 
@@ -228,7 +228,7 @@ function array_of_set(set, sorts) {
           var param$2 = param$1;
           var key = param$2[0];
           var sort = i === 0 ? $$Array.fast_sort : $$Array.stable_sort;
-          var compare$1 = param$2[1] ? (function (a, b) {
+          var compare$1 = param$2[1] >= 235215128 ? (function (a, b) {
                 return -compare(key, a, b) | 0;
               }) : (function (param, param$1) {
                 return compare(key, param, param$1);

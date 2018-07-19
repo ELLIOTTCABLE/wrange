@@ -125,7 +125,7 @@ describe "Data model" begin fun ()->
             Person.set_add set a_person;
             Person.set_add set another_person;
             Person.set_add set last_person;
-            let result = Person.(array_of_set set ~sorts:[First, Ascending]) in
+            let result = Person.(array_of_set set ~sorts:[`First, `Ascending]) in
             expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
@@ -138,7 +138,7 @@ describe "Data model" begin fun ()->
             Person.set_add set a_person;
             Person.set_add set another_person;
             Person.set_add set last_person;
-            let result = Person.(array_of_set set ~sorts:[First, Descending]) in
+            let result = Person.(array_of_set set ~sorts:[`First, `Descending]) in
             expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Ranger"; "Kelly"; "Andy"|])
          );
@@ -151,7 +151,7 @@ describe "Data model" begin fun ()->
             Person.set_add set a_person;
             Person.set_add set another_person;
             Person.set_add set last_person;
-            let result = Person.(array_of_set set ~sorts:[First, Ascending; Last, Ascending]) in
+            let result = Person.(array_of_set set ~sorts:[`First, `Ascending; `Last, `Ascending]) in
             expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
          );
@@ -164,7 +164,7 @@ describe "Data model" begin fun ()->
                make_person ~first_name:"Andy" ~last_name:"Awesomedottir" ();
                make_person ~first_name:"Ranger" ~last_name:"Awesomedottir" ();
             ];
-            let result = Person.(array_of_set set ~sorts:[Last, Ascending; First, Ascending]) in
+            let result = Person.(array_of_set set ~sorts:[`Last, `Ascending; `First, `Ascending]) in
             expect (Array.map Person.(fun p -> p.first_name) result)
             |> (toEqual [|"Andy"; "Kelly"; "Ranger"; "Kachel"|])
          );
