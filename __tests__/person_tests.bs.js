@@ -43,6 +43,18 @@ describe("Data model", (function () {
                                           return Person.birthday_of_string_exn("this is not a birthday");
                                         })));
                       }));
+                Jest.test("can be converted to JSON", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                        return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
+                                              return Person.to_json(person);
+                                            }))));
+                      }));
+                Jest.test("round-trips through JSON", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                        var json = Person.to_json(person);
+                        var clone = Person.of_json_exn(json);
+                        return Jest.Expect[/* toEqual */12](clone, Jest.Expect[/* expect */0](person));
+                      }));
                 describe("Record validation", (function () {
                         Jest.test("accepts a well-formed description", (function () {
                                 return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {

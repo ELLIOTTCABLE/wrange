@@ -5,9 +5,12 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var $$String = require("bs-platform/lib/js/string.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
+var Js_json = require("bs-platform/lib/js/js_json.js");
+var Js_option = require("bs-platform/lib/js/js_option.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Js_mapperRt = require("bs-platform/lib/js/js_mapperRt.js");
+var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var Caml_primitive = require("bs-platform/lib/js/caml_primitive.js");
 
 var jsMapperConstantArray = /* array */[
@@ -167,6 +170,16 @@ function compare(key, a, b) {
   }
 }
 
+function of_json_exn(json) {
+  var d = Js_option.getExn(Js_json.decodeObject(json));
+  var last_name = Js_option.getExn(Js_json.decodeString(Js_option.getExn(Js_primitive.undefined_to_opt(d["last_name"]))));
+  var first_name = Js_option.getExn(Js_json.decodeString(Js_option.getExn(Js_primitive.undefined_to_opt(d["first_name"]))));
+  var gender = Js_option.getExn(Js_json.decodeString(Js_option.getExn(Js_primitive.undefined_to_opt(d["gender"]))));
+  var favourite_colour = Js_option.getExn(Js_json.decodeString(Js_option.getExn(Js_primitive.undefined_to_opt(d["favourite_colour"]))));
+  var birthday = Js_option.getExn(Js_json.decodeString(Js_option.getExn(Js_primitive.undefined_to_opt(d["birthday"]))));
+  return of_string_description(last_name, first_name, gender, favourite_colour, birthday);
+}
+
 function to_json(person) {
   var json = { };
   json["last_name"] = person[/* last_name */0];
@@ -229,6 +242,7 @@ exports.create = create;
 exports.of_string_description = of_string_description;
 exports.of_object = of_object;
 exports.to_object = to_object;
+exports.of_json_exn = of_json_exn;
 exports.to_json = to_json;
 exports.set_create = set_create;
 exports.set_add = set_add;

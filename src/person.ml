@@ -69,6 +69,18 @@ let compare key a b =
    (* | Birthday -> Float.compare ... *)
    | Birthday -> Pervasives.compare (Js.Date.valueOf a.birthday) (Js.Date.valueOf b.birthday)
 
+let of_json_exn json =
+   let open Js.Json in
+   let open Js.Dict in
+   let open Js.Option in
+   let d = getExn (decodeObject json) in
+   let last_name = get d "last_name" |> getExn |> decodeString |> getExn in
+   let first_name = get d "first_name" |> getExn |> decodeString |> getExn in
+   let gender = get d "gender" |> getExn |> decodeString |> getExn in
+   let favourite_colour = get d "favourite_colour" |> getExn |> decodeString |> getExn in
+   let birthday = get d "birthday" |> getExn |> decodeString |> getExn in
+   of_string_description ~last_name ~first_name ~gender ~favourite_colour ~birthday
+
 (* FIXME: There's proooobably a better way to do this, in BuckleScript proper, instead of this manual,
  *        imperative building ... *)
 let to_json person =
@@ -77,7 +89,7 @@ let to_json person =
   Js.Dict.set json "first_name" (Js.Json.string person.first_name);
   Js.Dict.set json "gender" (Js.Json.string (genderToJs person.gender));
   Js.Dict.set json "favourite_colour" (Js.Json.string (colourToJs person.favourite_colour));
-  Js.Dict.set json "birthday" (Js.Json.string (Js.Date.toJSON person.birthday));
+  Js.Dict.set json "birthday" (Js.Json.string (Js.Date.toJSONUnsafe person.birthday));
   Js.Json.object_ json
 
 

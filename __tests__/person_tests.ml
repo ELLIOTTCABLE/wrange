@@ -41,6 +41,20 @@ describe "Data model" begin fun ()->
          ) |> toThrow
       );
 
+      test "can be converted to JSON" Expect.(fun ()->
+         let person = make_person () in
+         expect (fun _ ->
+            Person.to_json person
+         ) |> not_ |> toThrow
+      );
+
+      test "round-trips through JSON" Expect.(fun ()->
+         let person = make_person () in
+         let json = Person.to_json person in
+         let clone = Person.of_json_exn json in
+         expect person |> (toEqual clone)
+      );
+
       describe "Record validation" begin fun ()->
          test "accepts a well-formed description" Expect.(fun ()->
             expect (fun _ ->
