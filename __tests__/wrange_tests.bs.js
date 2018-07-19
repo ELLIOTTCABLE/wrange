@@ -5,6 +5,7 @@ var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Person = require("../src/person.bs.js");
 var Wrange = require("../src/wrange.bs.js");
+var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function make_person($staropt$star, $staropt$star$1, $staropt$star$2, $staropt$star$3, $staropt$star$4, _) {
@@ -124,8 +125,8 @@ describe("Data model", (function () {
                                             "Andy",
                                             "Kelly",
                                             "Ranger"
-                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
-                                                      return pers[/* first_name */1];
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (p) {
+                                                      return p[/* first_name */1];
                                                     }), result)));
                               }));
                         Jest.test("can be sorted in inverted order", (function () {
@@ -147,8 +148,8 @@ describe("Data model", (function () {
                                             "Ranger",
                                             "Kelly",
                                             "Andy"
-                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
-                                                      return pers[/* first_name */1];
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (p) {
+                                                      return p[/* first_name */1];
                                                     }), result)));
                               }));
                         Jest.test("accepts multiple keys to sort by, and ignores extraneous ones", (function () {
@@ -176,8 +177,8 @@ describe("Data model", (function () {
                                             "Andy",
                                             "Kelly",
                                             "Ranger"
-                                          ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
-                                                      return pers[/* first_name */1];
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (p) {
+                                                      return p[/* first_name */1];
                                                     }), result)));
                               }));
                         return Jest.test("sorts lexicographically by secondary keys in the case of conflicts", (function () {
@@ -215,8 +216,8 @@ describe("Data model", (function () {
                                                   "Kelly",
                                                   "Ranger",
                                                   "Kachel"
-                                                ], Jest.Expect[/* expect */0]($$Array.map((function (pers) {
-                                                            return pers[/* first_name */1];
+                                                ], Jest.Expect[/* expect */0]($$Array.map((function (p) {
+                                                            return p[/* first_name */1];
                                                           }), result)));
                                     }));
                       }));
@@ -238,9 +239,51 @@ describe("Parsing", (function () {
                 var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25\n");
                 return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
               }));
-        return Jest.test("recognizes a single record with no terminator", (function () {
-                      var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25");
-                      return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+        Jest.test("recognizes a single record with no terminator", (function () {
+                var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25");
+                return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+              }));
+        it.skip("recognizes a single record with prefixing whitespace", (function () {
+                var results = Wrange.parse_print_errors("  Wittig|Kachel|Female|Yellow|1989-01-25");
+                return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+              }));
+        Jest.test("recognizes a single record with whitespace preceding the EOF", (function () {
+                var results = Wrange.parse_print_errors("Wittig|Kachel|Female|Yellow|1989-01-25  ");
+                return Jest.Expect[/* toBe */2](1, Jest.Expect[/* expect */0](List.length(results)));
+              }));
+        Jest.test("parses a single record, with spacing", (function () {
+                var match = Wrange.parse_print_errors("Wittig | Kachel | female | yellow | 1989-01-25");
+                if (match && !match[1]) {
+                  return Jest.Expect[/* toEqual */12](/* record */[
+                              /* last_name */"Wittig",
+                              /* first_name */"Kachel",
+                              /* gender : Female */-322301012,
+                              /* favourite_colour : Yellow */82908052,
+                              /* birthday */Person.birthday_of_string_exn("1989-01-25")
+                            ], Jest.Expect[/* expect */0](match[0]));
+                } else {
+                  return Pervasives.failwith("see previous test");
+                }
+              }));
+        Jest.test("recognizes multiple spaced, terminated records", (function () {
+                var results = Wrange.parse_print_errors("Awesomedottir,  Kelly,   Female,  Yellow,  1989-01-01\n                    Awesomedottir,  Andy,    Male,    Red,     1989-01-01\n                    Awesomedottir,  Ranger,  Female,  Black,   2012-01-01\n      ");
+                return Jest.Expect[/* toBe */2](3, Jest.Expect[/* expect */0](List.length(results)));
+              }));
+        return Jest.test("parses multiple spaced, terminated records", (function () {
+                      var results = Wrange.parse_print_errors("Awesomedottir,  Kelly,   Female,  Yellow,  1989-01-01\n                    Awesomedottir,  Andy,    Male,    Red,     1989-01-01\n                    Awesomedottir,  Ranger,  Female,  Black,   2012-01-01\n      ");
+                      var results$prime = List.map((function (p) {
+                              return p[/* first_name */1];
+                            }), results);
+                      return Jest.Expect[/* toEqual */12](/* :: */[
+                                  "Ranger",
+                                  /* :: */[
+                                    "Andy",
+                                    /* :: */[
+                                      "Kelly",
+                                      /* [] */0
+                                    ]
+                                  ]
+                                ], Jest.Expect[/* expect */0](results$prime));
                     }));
       }));
 

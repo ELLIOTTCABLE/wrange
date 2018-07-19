@@ -12,18 +12,18 @@ let next_line lexbuf =
     }
 }
 
+let newline = '\r' | '\n' | "\r\n"
+let s = " " | "\t"
+
 let sep = ['|' ',' ' ']
-let white = " " | "\t"
-let spaced_sep = white* sep white*
 
 let value = [^ '|' ',' ' ' '\r' '\n']+
 
-let newline = '\r' | '\n' | "\r\n"
 
 rule read =
   parse
-  | newline    { next_line lexbuf; NL }
-  | spaced_sep { SEP }
-  | value      { VAL (Lexing.lexeme lexbuf) }
+  | s* newline s* { next_line lexbuf; NL }
+  | s* sep s*     { SEP }
+  | value         { VAL (Lexing.lexeme lexbuf) }
   | _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
-  | eof      { EOF }
+  | s* eof        { EOF }
