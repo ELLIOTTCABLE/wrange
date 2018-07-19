@@ -69,6 +69,17 @@ let compare key a b =
    (* | Birthday -> Float.compare ... *)
    | Birthday -> Pervasives.compare (Js.Date.valueOf a.birthday) (Js.Date.valueOf b.birthday)
 
+(* FIXME: There's proooobably a better way to do this, in BuckleScript proper, instead of this manual,
+ *        imperative building ... *)
+let to_json person =
+  let json = Js.Dict.empty () in
+  Js.Dict.set json "last_name" (Js.Json.string person.last_name);
+  Js.Dict.set json "first_name" (Js.Json.string person.first_name);
+  Js.Dict.set json "gender" (Js.Json.string (genderToJs person.gender));
+  Js.Dict.set json "favourite_colour" (Js.Json.string (colourToJs person.favourite_colour));
+  Js.Dict.set json "birthday" (Js.Json.string (Js.Date.toJSON person.birthday));
+  Js.Json.object_ json
+
 
 (* NOTE: I'd really prefer to make this a submodule, but ... BuckleScript ... -_-
  *       <https://github.com/BuckleScript/bucklescript/issues/2948> *)

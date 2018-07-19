@@ -167,6 +167,16 @@ function compare(key, a, b) {
   }
 }
 
+function to_json(person) {
+  var json = { };
+  json["last_name"] = person[/* last_name */0];
+  json["first_name"] = person[/* first_name */1];
+  json["gender"] = Js_mapperRt.binarySearch(4, person[/* gender */2], jsMapperConstantArray);
+  json["favourite_colour"] = Js_mapperRt.binarySearch(9, person[/* favourite_colour */3], jsMapperConstantArray$1);
+  json["birthday"] = person[/* birthday */4].toJSON();
+  return json;
+}
+
 function set_create() {
   return Hashtbl.create(undefined, 100);
 }
@@ -219,6 +229,7 @@ exports.create = create;
 exports.of_string_description = of_string_description;
 exports.of_object = of_object;
 exports.to_object = to_object;
+exports.to_json = to_json;
 exports.set_create = set_create;
 exports.set_add = set_add;
 exports.set_find_exn = set_find_exn;

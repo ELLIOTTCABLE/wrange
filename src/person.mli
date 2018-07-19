@@ -26,6 +26,8 @@ val of_string_description : last_name:string -> first_name:string -> gender:stri
 val of_object : abs -> t
 val to_object : t -> abs
 
+val to_json : t -> Js.Json.t
+
 val set_create : unit -> set
 val set_add : set -> t -> unit
 val set_find_exn : set -> string -> string -> string -> t
