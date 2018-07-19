@@ -1,15 +1,21 @@
 'use strict';
 
+var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Lexer = require("./lexer.bs.js");
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
+var Lexing = require("bs-platform/lib/js/lexing.js");
+var Parser = require("./parser.bs.js");
+var Person = require("./person.bs.js");
+var Printf = require("bs-platform/lib/js/printf.js");
 var $$String = require("bs-platform/lib/js/string.js");
+var Wrange = require("./wrange.bs.js");
 var Express = require("bs-express/src/Express.js");
-var Js_json = require("bs-platform/lib/js/js_json.js");
 var Process = require("process");
 
 function make_success() {
   var json = { };
-  json["success"] = true;
+  json["status"] = "success";
   return json;
 }
 
@@ -19,12 +25,37 @@ function make_failure() {
   return json;
 }
 
-function getDictString(dict, key) {
-  var match = dict[key];
-  if (match !== undefined) {
-    return Js_json.decodeString(match);
-  }
-  
+function make_parsing_failure($staropt$star, lexbuf) {
+  var msg = $staropt$star !== undefined ? $staropt$star : "";
+  var pos = lexbuf[/* lex_curr_p */11];
+  var loc = Curry._3(Printf.sprintf(/* Format */[
+            /* String */Block.__(2, [
+                /* No_padding */0,
+                /* Char_literal */Block.__(12, [
+                    /* ":" */58,
+                    /* Int */Block.__(4, [
+                        /* Int_d */0,
+                        /* No_padding */0,
+                        /* No_precision */0,
+                        /* Char_literal */Block.__(12, [
+                            /* ":" */58,
+                            /* Int */Block.__(4, [
+                                /* Int_d */0,
+                                /* No_padding */0,
+                                /* No_precision */0,
+                                /* End_of_format */0
+                              ])
+                          ])
+                      ])
+                  ])
+              ]),
+            "%s:%d:%d"
+          ]), pos[/* pos_fname */0], pos[/* pos_lnum */1], (pos[/* pos_cnum */3] - pos[/* pos_bol */2] | 0) + 1 | 0);
+  var error = "Error parsing record:\n" + (String(loc) + (" - " + (String(msg) + "")));
+  var json = { };
+  json["status"] = "failure";
+  json["error_message"] = error;
+  return json;
 }
 
 function $great$great(f, g, x) {
@@ -50,26 +81,54 @@ function logRequest(next, req) {
   return Curry._1(next, Express.Next[/* middleware */0]);
 }
 
-function addPerson(_, req) {
+function addPerson(_, _$1, req) {
   var match = Express.Request[/* bodyText */5](req);
   if (match !== undefined) {
-    var partial_arg = match;
-    var partial_arg$1 = Express.Response[/* sendString */2];
-    return (function (param) {
-        return partial_arg$1(partial_arg, param);
-      });
+    var lexbuf = Lexing.from_string(match);
+    try {
+      Wrange.parse_buf_exn(lexbuf);
+      var partial_arg = make_success(/* () */0);
+      var partial_arg$1 = Express.Response[/* sendJson */3];
+      var partial_arg$2 = Express.Response[/* status */9](/* Created */1);
+      return (function (param) {
+          var param$1 = Curry._1(partial_arg$2, param);
+          return partial_arg$1(partial_arg, param$1);
+        });
+    }
+    catch (raw_exn){
+      var exn = Js_exn.internalToOCamlException(raw_exn);
+      if (exn[0] === Lexer.$$SyntaxError) {
+        var partial_arg$3 = make_parsing_failure(exn[1], lexbuf);
+        var partial_arg$4 = Express.Response[/* sendJson */3];
+        var partial_arg$5 = Express.Response[/* status */9](/* BadRequest */19);
+        return (function (param) {
+            var param$1 = Curry._1(partial_arg$5, param);
+            return partial_arg$4(partial_arg$3, param$1);
+          });
+      } else if (exn === Parser.$$Error) {
+        var partial_arg$6 = make_parsing_failure(undefined, lexbuf);
+        var partial_arg$7 = Express.Response[/* sendJson */3];
+        var partial_arg$8 = Express.Response[/* status */9](/* BadRequest */19);
+        return (function (param) {
+            var param$1 = Curry._1(partial_arg$8, param);
+            return partial_arg$7(partial_arg$6, param$1);
+          });
+      } else {
+        throw exn;
+      }
+    }
   } else {
-    var partial_arg$2 = make_failure(/* () */0);
-    var partial_arg$3 = Express.Response[/* sendJson */3];
-    var partial_arg$4 = Express.Response[/* status */9](/* BadRequest */19);
+    var partial_arg$9 = make_failure(/* () */0);
+    var partial_arg$10 = Express.Response[/* sendJson */3];
+    var partial_arg$11 = Express.Response[/* status */9](/* BadRequest */19);
     return (function (param) {
-        var param$1 = Curry._1(partial_arg$4, param);
-        return partial_arg$3(partial_arg$2, param$1);
+        var param$1 = Curry._1(partial_arg$11, param);
+        return partial_arg$10(partial_arg$9, param$1);
       });
   }
 }
 
-function onListen(err) {
+function announce(port, err) {
   var exit = 0;
   var val;
   try {
@@ -87,31 +146,35 @@ function onListen(err) {
     }
   }
   if (exit === 1) {
-    console.log("Listening at http://127.0.0.1:3000");
+    console.log("Listening at http://127.0.0.1:" + String(port));
     return /* () */0;
   }
   
 }
 
-var api = Express.Router[/* make */15](undefined, undefined, undefined, /* () */0);
+function start($staropt$star, set) {
+  var port = $staropt$star !== undefined ? $staropt$star : 3000;
+  var api = Express.Router[/* make */15](undefined, undefined, undefined, /* () */0);
+  Express.Router[/* post */7](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
+              return addPerson(set, param, param$1);
+            })));
+  var app = Express.App[/* make */15](/* () */0);
+  Express.App[/* use */0](app, Express.Middleware[/* text */1](undefined, undefined, undefined, undefined, /* () */0));
+  Express.App[/* use */0](app, Express.Middleware[/* from */5](logRequest));
+  Express.App[/* useRouterOnPath */18](app, "/v1", api);
+  return Express.App[/* listen */19](app, port, (function (param) {
+                return announce(port, param);
+              }), /* () */0);
+}
 
-Express.Router[/* post */7](api, "/records", Express.Middleware[/* from */5](addPerson));
-
-var app = Express.App[/* make */15](/* () */0);
-
-Express.App[/* use */0](app, Express.Middleware[/* text */1](undefined, undefined, undefined, undefined, /* () */0));
-
-Express.App[/* use */0](app, Express.Middleware[/* from */5](logRequest));
-
-Express.App[/* useRouterOnPath */18](app, "/v1", api);
-
-Express.App[/* listen */19](app, 3000, onListen, /* () */0);
+start(undefined, Person.set_create(/* () */0));
 
 exports.make_success = make_success;
 exports.make_failure = make_failure;
-exports.getDictString = getDictString;
+exports.make_parsing_failure = make_parsing_failure;
 exports.$great$great = $great$great;
 exports.logRequest = logRequest;
 exports.addPerson = addPerson;
-exports.onListen = onListen;
-/* api Not a pure module */
+exports.announce = announce;
+exports.start = start;
+/*  Not a pure module */
