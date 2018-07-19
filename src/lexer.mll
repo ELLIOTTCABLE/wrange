@@ -1,6 +1,6 @@
 {
 open Lexing
-open Wrange_parser
+open Parser
 
 exception SyntaxError of string
 

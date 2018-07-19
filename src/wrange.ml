@@ -9,14 +9,14 @@ let print_position outx lexbuf =
 
 
 let parse_buf_exn lexbuf =
-   Wrange_parser.doc Wrange_lexer.read lexbuf
+   Parser.doc Lexer.read lexbuf
 
 let parse_buf_print_errors lexbuf =
   try parse_buf_exn lexbuf with
-  | Wrange_lexer.SyntaxError msg ->
+  | Lexer.SyntaxError msg ->
     Printf.fprintf stderr "%a: %s\n" print_position lexbuf msg;
     []
-  | Wrange_parser.Error ->
+  | Parser.Error ->
     Printf.fprintf stderr "%a: syntax error\n" print_position lexbuf;
     []
 

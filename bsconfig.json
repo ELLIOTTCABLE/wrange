@@ -2,8 +2,34 @@
   "name": "wrange",
   "version": "0.0.1",
   "sources": [
-    {"dir": "src", "subdirs": true},
-    {"dir": "__tests__", "type": "dev"}
+    {
+       "dir": "src",
+       "subdirs": true,
+       "generators": [
+          {
+             "name": "ocamllex",
+             "edge": ["lexer.ml", ":", "lexer.mll"]
+          },
+          {
+             "name": "menhir",
+             "edge": ["parser.ml", "parser.mli", ":", "parser.mly"]
+          }
+       ]
+    },
+    {
+       "dir": "__tests__",
+       "type": "dev"
+    }
+  ],
+  "generators": [
+     {
+        "name": "ocamllex",
+        "command": "ocamllex $in"
+     },
+     {
+        "name": "menhir",
+        "command": "menhir --comment --strict $in"
+     }
   ],
   "package-specs": {
     "module": "commonjs",

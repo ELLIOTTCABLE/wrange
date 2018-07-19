@@ -2,12 +2,12 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Lexer = require("./lexer.bs.js");
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Lexing = require("bs-platform/lib/js/lexing.js");
+var Parser = require("./parser.bs.js");
 var Printf = require("bs-platform/lib/js/printf.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
-var Wrange_lexer = require("./wrange_lexer.bs.js");
-var Wrange_parser = require("./wrange_parser.bs.js");
 
 function print_position(outx, lexbuf) {
   var pos = lexbuf[/* lex_curr_p */11];
@@ -37,16 +37,16 @@ function print_position(outx, lexbuf) {
 }
 
 function parse_buf_exn(lexbuf) {
-  return Wrange_parser.doc(Wrange_lexer.read, lexbuf);
+  return Parser.doc(Lexer.read, lexbuf);
 }
 
 function parse_buf_print_errors(lexbuf) {
   try {
-    return Wrange_parser.doc(Wrange_lexer.read, lexbuf);
+    return Parser.doc(Lexer.read, lexbuf);
   }
   catch (raw_exn){
     var exn = Js_exn.internalToOCamlException(raw_exn);
-    if (exn[0] === Wrange_lexer.$$SyntaxError) {
+    if (exn[0] === Lexer.$$SyntaxError) {
       Curry._3(Printf.fprintf(Pervasives.stderr, /* Format */[
                 /* Alpha */Block.__(15, [/* String_literal */Block.__(11, [
                         ": ",
@@ -61,7 +61,7 @@ function parse_buf_print_errors(lexbuf) {
                 "%a: %s\n"
               ]), print_position, lexbuf, exn[1]);
       return /* [] */0;
-    } else if (exn === Wrange_parser.$$Error) {
+    } else if (exn === Parser.$$Error) {
       Curry._2(Printf.fprintf(Pervasives.stderr, /* Format */[
                 /* Alpha */Block.__(15, [/* String_literal */Block.__(11, [
                         ": syntax error\n",
@@ -78,7 +78,7 @@ function parse_buf_print_errors(lexbuf) {
 
 function parse_exn(str) {
   var lexbuf = Lexing.from_string(str);
-  return Wrange_parser.doc(Wrange_lexer.read, lexbuf);
+  return Parser.doc(Lexer.read, lexbuf);
 }
 
 function parse_print_errors(str) {
