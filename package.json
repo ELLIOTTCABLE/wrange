@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "main": "src/exports.js",
   "scripts": {
-    "test": "npm run build && jest --verbose --coverage",
+    "test": "npm run build && jest --verbose",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "start": "npm run build && node src/server.bs.js",
-    "watch:test": "jest --coverage --watchAll",
+    "watch:test": "jest --watchAll",
     "watch:build": "bsb -make-world -w",
     "watch:start": "nodemon -e .bs.js --watch src src/server.bs.js"
   },
@@ -27,6 +27,8 @@
     "ocaml-language-server": "^1.0.35"
   },
   "jest": {
+     "collectCoverage": true,
+     "collectCoverageFrom": ["src/*.{js,jsx}", "!**/parser.*", "!**/server.*", "!**/node_modules/**"],
      "coverageReporters": ["json", "lcov", "text", "html"]
   }
 }
