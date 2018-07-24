@@ -37,7 +37,8 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "bs-express"
+    "bs-express",
+    "@elliottcable/bs-cmdliner"
   ],
   "bs-dev-dependencies": [
     "@glennsl/bs-jest"
