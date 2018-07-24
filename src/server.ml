@@ -40,7 +40,10 @@ let addPerson set _next req (* res *) =
       let lexbuf = Lexing.from_string text in
       try begin
          let people = Wrange.parse_buf_exn lexbuf in
-         let people' = Array.of_list people |> Array.map (fun p -> Person.to_json p) in
+         let people' = Array.of_list people |> Array.map (fun person ->
+            Person.set_add set person;
+            Person.to_json person
+         ) in
          Response.status Response.StatusCode.Created
          >> Response.sendJson @@ (make_success (Js.Json.array people'))
       end with

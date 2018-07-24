@@ -80,13 +80,16 @@ function logRequest(next, req) {
   return Curry._1(next, Express.Next[/* middleware */0]);
 }
 
-function addPerson(_, _$1, req) {
+function addPerson(set, _, req) {
   var match = Express.Request[/* bodyText */5](req);
   if (match !== undefined) {
     var lexbuf = Lexing.from_string(match);
     try {
       var people = Wrange.parse_buf_exn(lexbuf);
-      var people$prime = $$Array.map(Person.to_json, $$Array.of_list(people));
+      var people$prime = $$Array.map((function (person) {
+              Person.set_add(set, person);
+              return Person.to_json(person);
+            }), $$Array.of_list(people));
       var partial_arg = make_success(people$prime);
       var partial_arg$1 = Express.Response[/* sendJson */3];
       var partial_arg$2 = Express.Response[/* status */9](/* Created */1);
