@@ -97,3 +97,13 @@ documentation to write, as well as integration tests ...
 
 ‘This grieved me heartily; and now I saw, though too late, the folly of beginning a work before we
 count the cost, and before we judge rightly of our own strength to go through with it.’
+
+----
+
+Well, taking a break turned out to be good. Had an easy time knocking out the rest of the REST
+server. Had to take some creative liberties with the spec (`/records/name` isn't descriptive when
+there's two possible names to sort by; I opted to omit a default, and just use `/records/first` and
+`/records/last`.)
+
+I was originally intending to do the CLI in vanillaJS, but hey, I'm almost done. Might as well stay
+in the same toolkit.
