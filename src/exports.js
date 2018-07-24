@@ -52,7 +52,9 @@ function(obj, first_name = null, gender, favourite_colour, birthday){
          throw new ArgumentError("favourite_colour is of an unknown configuration")
    }
 
-   return $Person.of_object(obj)
+   const person = $Person.of_object(obj)
+   person.birthdayString = Person.prototype.birthdayString
+   return person
 }
 
 Person.male =        Symbol('male'),
@@ -70,4 +72,30 @@ Person.blue =        Symbol('blue'),
 Person.indigo =      Symbol('indigo'),
 Person.violet =      Symbol('violet')
 
-exports.Person.extract = $Person.to_object
+Person.extract = $Person.to_object
+
+Person.prototype.birthdayString = function(){
+   return $Person.string_of_birthday(this)
+}
+
+
+// FIXME: This doesn't actually create values that inherit, prototypically, from `Set`. Cheatin'.
+let Set = exports.Person.Set =
+function(){
+   let set = $Person.set_create()
+   set.add = Set.prototype.add
+   set.find = Set.prototype.find
+   set.toArray = Set.prototype.toArray
+   return set
+}
+
+
+// Given a `Person` (well, at least, a value retured by `new Person()`...), add that person to the
+// receiving `Set` (well, at least, to whatever sort of value is returned by `new Person.Set()`.)
+Set.prototype.add = function(abs_person){
+   $Person.set_add(this, abs_person)
+}
+
+Set.prototype.find = function(last, first, birthday){
+   return $Person.set_find_exn(this, last, first, birthday)
+}

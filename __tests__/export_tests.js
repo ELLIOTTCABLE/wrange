@@ -46,5 +46,39 @@ describe("Exports", () => {
          const it = new Person(props)
          expect(Person.extract(it)).toEqual(props)
       })
+   }) // describe Person
+
+   describe("Person.Set", () => {
+      const Person = wrange.Person
+      test("exists", () => {
+         expect(Person.Set).toBeDefined()
+      })
+
+      test("represents the set-create-function in JS", () => {
+         expect(Person.Set).toBeInstanceOf(Function)
+      })
+
+      test("can successfully create a set from JS", () => {
+         const set = new Person.Set()
+         expect(set).toBeDefined()
+      })
+
+      test("can have people added", () => {
+         const person = new Person("Last Name", "First Name", Person.female, Person.blue,
+            new Date(1966, 2, 7))
+
+         const set = new Person.Set()
+         expect(()=> set.add(person) ).not.toThrow()
+      })
+
+      test.skip("can find added people", () => {
+         const person = new Person("Last Name", "First Name", Person.female, Person.blue,
+            new Date(1966, 2, 7))
+             , set = new Person.Set()
+         set.add(person)
+
+         const rv = set.find("Last Name", "First Name", "1966-2-7")
+      })
    })
+
 }) // describe Exports
