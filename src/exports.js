@@ -2,32 +2,13 @@
 const Symbol = require('es6-symbol')
     , isSymbol = require('es6-symbol/is-symbol')
 
-const PersonModule = require('./person.bs')
-
-
-// type gender = Male | Female | Neither | Unspecified
-// type colour = Black | White | Red | Orange | Yellow | Green | Blue | Indigo | Violet
-const Person = exports.Person = {
-   male:          Symbol('male'),
-   female:        Symbol('female'),
-   neither:       Symbol('neither'),
-   unspecified:   Symbol('unspecified'),
-
-   black:         Symbol('black'),
-   white:         Symbol('white'),
-   red:           Symbol('red'),
-   orange:        Symbol('orange'),
-   yellow:        Symbol('yellow'),
-   green:         Symbol('green'),
-   blue:          Symbol('blue'),
-   indigo:        Symbol('indigo'),
-   violet:        Symbol('violet')
-}
+const $Person = require('./person.bs')
 
 
 // XXX: I abhor doing this manual invariants-checking when I'm using a strongly-typed language.
 //      “What the hell, BuckleScript?”, part N ...
-exports.Person.create = function(obj, first_name = null, gender, favourite_colour, birthday){
+const Person = exports.Person =
+function(obj, first_name = null, gender, favourite_colour, birthday){
    if (typeof obj !== 'object' || first_name !== null)
       obj = {
          last_name: obj,
@@ -71,7 +52,22 @@ exports.Person.create = function(obj, first_name = null, gender, favourite_colou
          throw new ArgumentError("favourite_colour is of an unknown configuration")
    }
 
-   return PersonModule.of_object(obj)
+   return $Person.of_object(obj)
 }
 
-exports.Person.extract = PersonModule.to_object
+Person.male =        Symbol('male'),
+Person.female =      Symbol('female'),
+Person.neither =     Symbol('neither'),
+Person.unspecified = Symbol('unspecified'),
+
+Person.black =       Symbol('black'),
+Person.white =       Symbol('white'),
+Person.red =         Symbol('red'),
+Person.orange =      Symbol('orange'),
+Person.yellow =      Symbol('yellow'),
+Person.green =       Symbol('green'),
+Person.blue =        Symbol('blue'),
+Person.indigo =      Symbol('indigo'),
+Person.violet =      Symbol('violet')
+
+exports.Person.extract = $Person.to_object
