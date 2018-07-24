@@ -92,7 +92,3 @@ let start ?(port=3000) (set : Person.set) =
    app |. App.use (Middleware.from logRequest);
    app |. App.useRouterOnPath ~path:"/v1" api;
    app |. App.listen ~port ~onListen:(announce port) ()
-
-
-let () =
-   start (Person.set_create ()) |> ignore
