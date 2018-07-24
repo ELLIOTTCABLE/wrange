@@ -12,7 +12,9 @@ var Printf = require("bs-platform/lib/js/printf.js");
 var $$String = require("bs-platform/lib/js/string.js");
 var Wrange = require("./wrange.bs.js");
 var Express = require("bs-express/src/Express.js");
+var Js_json = require("bs-platform/lib/js/js_json.js");
 var Process = require("process");
+var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function make_success(value) {
   var json = { };
@@ -59,6 +61,14 @@ function make_parsing_failure($staropt$star, lexbuf) {
 
 function $great$great(f, g, x) {
   return Curry._1(g, Curry._1(f, x));
+}
+
+function $great$slash$great(f, g, x) {
+  var match = Curry._1(f, x);
+  if (match !== undefined) {
+    return Curry._1(g, Js_primitive.valFromOption(match));
+  }
+  
 }
 
 function logRequest(next, req) {
@@ -131,6 +141,26 @@ function addPerson(set, _, req) {
   }
 }
 
+function listPeople(set, _, req) {
+  var params = Express.Request[/* params */0](req);
+  var match = $great$slash$great((function (param) {
+          return Js_primitive.undefined_to_opt(params[param]);
+        }), Js_json.decodeString, "key");
+  var key = match !== undefined ? match : "Last";
+  var match$1 = $great$slash$great((function (param) {
+          return Js_primitive.undefined_to_opt(params[param]);
+        }), Js_json.decodeString, "order");
+  var order = match$1 !== undefined ? match$1 : "Ascending";
+  var people = $$Array.map(Person.to_json, Person.array_of_set_str_key(set, key, order));
+  var partial_arg = make_success(people);
+  var partial_arg$1 = Express.Response[/* sendJson */3];
+  var partial_arg$2 = Express.Response[/* status */9](/* Ok */0);
+  return (function (param) {
+      var param$1 = Curry._1(partial_arg$2, param);
+      return partial_arg$1(partial_arg, param$1);
+    });
+}
+
 function announce(port, err) {
   var exit = 0;
   var val;
@@ -158,6 +188,15 @@ function announce(port, err) {
 function start($staropt$star, set) {
   var port = $staropt$star !== undefined ? $staropt$star : 3000;
   var api = Express.Router[/* make */15](undefined, undefined, undefined, /* () */0);
+  Express.Router[/* get */4](api, "/records/:key/:order", Express.Middleware[/* from */5]((function (param, param$1) {
+              return listPeople(set, param, param$1);
+            })));
+  Express.Router[/* get */4](api, "/records/:key", Express.Middleware[/* from */5]((function (param, param$1) {
+              return listPeople(set, param, param$1);
+            })));
+  Express.Router[/* get */4](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
+              return listPeople(set, param, param$1);
+            })));
   Express.Router[/* post */7](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
               return addPerson(set, param, param$1);
             })));
@@ -176,8 +215,10 @@ exports.make_success = make_success;
 exports.make_failure = make_failure;
 exports.make_parsing_failure = make_parsing_failure;
 exports.$great$great = $great$great;
+exports.$great$slash$great = $great$slash$great;
 exports.logRequest = logRequest;
 exports.addPerson = addPerson;
+exports.listPeople = listPeople;
 exports.announce = announce;
 exports.start = start;
 /*  Not a pure module */

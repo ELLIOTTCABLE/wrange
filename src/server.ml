@@ -19,6 +19,10 @@ let make_parsing_failure ?(msg="") lexbuf =
   make_failure (Js.Json.string error)
 
 let (>>) f g x = x |> f |> g
+let (>/>) : ('a -> 'b option) -> ('b -> 'c option) -> 'a -> 'c option = fun f g x ->
+   match f x with
+   | Some y -> g y
+   | None -> None
 
 
 let logRequest next req =
@@ -54,6 +58,21 @@ let addPerson set _next req (* res *) =
          Response.status Response.StatusCode.BadRequest
          >> Response.sendJson @@ make_parsing_failure lexbuf
 
+let listPeople set _next req (* res *) =
+   let params = Request.params req in
+   let key = begin match (Js.Dict.get params >/> Js.Json.decodeString) "key" with
+   | None -> "Last"
+   | Some key' -> key'
+   end in
+   let order = begin match (Js.Dict.get params >/> Js.Json.decodeString) "order" with
+   | None -> "Ascending"
+   | Some order' -> order'
+   end in
+   let people = Person.array_of_set_str_key set key order
+   |> Array.map (fun p -> Person.to_json p) in
+   Response.status Response.StatusCode.Ok
+   >> Response.sendJson @@ (make_success (Js.Json.array people))
+
 
 let announce port err = match err with
   | exception Js.Exn.Error e -> Js.log e; Node.Process.exit 1
@@ -63,6 +82,9 @@ let announce port err = match err with
 let start ?(port=3000) (set : Person.set) =
    let api = Router.make () in
 
+   Router.get api  ~path:"/records/:key/:order" @@ Middleware.from (listPeople set);
+   Router.get api  ~path:"/records/:key" @@ Middleware.from (listPeople set);
+   Router.get api  ~path:"/records" @@ Middleware.from (listPeople set);
    Router.post api ~path:"/records" @@ Middleware.from (addPerson set);
 
    let app = App.make () in
