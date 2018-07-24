@@ -121,7 +121,7 @@ let lexicographic_step arr i (key, order) =
  * FIXME: Horrific, imperative, jump-off-a-bridge-before-reading implementation.
  * FIXME: There's *gotta* be an Array.of_seq or Hashtbl.to_array implementation I can gank,
  *        somewhere. Hate rolling my own for super-generic code like this.*)
-let array_of_set (set:set) ~sorts =
+let array_of_set set ~sorts =
    let i = ref 0 in
    let arr = Array.make (Hashtbl.length set) @@ nobody () in
    begin fun _key person ->
@@ -131,3 +131,13 @@ let array_of_set (set:set) ~sorts =
    |. Hashtbl.iter set;
    List.iteri (lexicographic_step arr) (List.rev sorts);
    arr
+
+let array_of_set_str_key set key order =
+   let key' = match key |> titlecase |> sort_keyFromJs with
+   | Some k -> k
+   | None -> failwith {j| '$(key)' is not a recognized sort-key. |j}
+   and order' = match order |> titlecase |> sort_orderFromJs with
+   | Some o -> o
+   | None -> failwith {j| '$(order)' is not a recognized sort-order. |j}
+   in
+   array_of_set set ~sorts:[key', order']

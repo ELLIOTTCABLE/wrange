@@ -34,6 +34,7 @@ val set_add : set -> t -> unit
 val set_find_exn : set -> string -> string -> string -> t
 
 val array_of_set : set -> sorts:(sort_key * sort_order) list -> t array
+val array_of_set_str_key : set -> string -> string -> t array
 
 val string_of_birthday : t -> string
 val birthday_of_string_exn : string -> Js.Date.t
