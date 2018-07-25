@@ -6,6 +6,41 @@ open Cmdliner
 
 let hello () = print_endline "Hello, world!"
 
-let hello_t = Term.(const hello $ const ())
+let start port files =
+   let set = Person.set_create () in
+   Server.start ~port set
+   |> ignore
 
-let () = Term.exit @@ Term.eval (hello_t, Term.info "wrange")
+(* CLI declarations *)
+let files' = Arg.(non_empty & pos_all file [] & info [] ~docv:"FILE")
+
+let hello' = Term.(const hello $ const ())
+
+
+let port' =
+  let doc = "Provide a REST interface on $(docv)" in
+  Arg.(value & opt int 3000 & info ["p"; "port"] ~docv:"PORT" ~doc)
+
+let start' =
+   let doc = "Start a REST server" in
+   Term.(const start $ port' $ files'),
+   Term.info ~doc "start"
+
+
+let print' =
+   let doc = "Sort, and display, the contents of the given person-records" in
+   Term.(const hello $ const ()),
+   Term.info ~doc "print"
+
+
+let default' =
+  let doc = "a person-record parser and server" in
+  let ret = `Help (`Pager, None) in
+  let ret' = Term.const ret in
+  Term.ret ret',
+  Term.info "wrange" ~version:"v0.0.1" ~doc
+
+
+let () =
+   let commands = [start'; print'] in
+   Term.(exit @@ eval_choice default' commands)

@@ -48,6 +48,7 @@
     "-bs-no-version-header"
   ],
   "warnings": {
+    "number": "-44",
     "error" : "+101"
   },
   "refmt": 3
