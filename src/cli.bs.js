@@ -19,7 +19,7 @@ function start(port, _) {
   return /* () */0;
 }
 
-var partial_arg = Cmdliner.Arg[/* file */34];
+var partial_arg = Cmdliner.Arg[/* string */32];
 
 var partial_arg$1 = Cmdliner.Arg[/* pos_all */17];
 
@@ -118,9 +118,7 @@ var commands = /* :: */[
   commands_001
 ];
 
-var eta = Cmdliner.Term[/* eval_choice */17](undefined, undefined, undefined, undefined, undefined, default$prime, commands);
-
-Cmdliner.Term[/* exit */24](undefined, eta);
+Cmdliner.Term[/* eval_choice */17](undefined, undefined, undefined, undefined, undefined, default$prime, commands);
 
 exports.hello = hello;
 exports.start = start;

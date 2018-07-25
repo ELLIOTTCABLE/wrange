@@ -12,7 +12,7 @@ let start port files =
    |> ignore
 
 (* CLI declarations *)
-let files' = Arg.(non_empty & pos_all file [] & info [] ~docv:"FILE")
+let files' = Arg.(non_empty & pos_all string [] & info [] ~docv:"FILE")
 
 let hello' = Term.(const hello $ const ())
 
@@ -41,6 +41,6 @@ let default' =
   Term.info "wrange" ~version:"v0.0.1" ~doc
 
 
-let () =
+let _ =
    let commands = [start'; print'] in
-   Term.(exit @@ eval_choice default' commands)
+   Term.eval_choice default' commands
