@@ -1,3 +1,6 @@
 package-lock.json       linguist-generated -diff
 
 **/*.bs.js              linguist-generated -diff
+
+src/lexer.ml            linguist-generated -diff
+src/parser.ml           linguist-generated -diff

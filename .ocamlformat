@@ -1,0 +1,10 @@
+margin = 90
+
+field-space = loose
+let-binding-spacing = sparse
+
+let-open = auto
+
+indicate-nested-or-patterns = unsafe-no
+break-sequences = true
+sequence-blank-line = preserve-one
