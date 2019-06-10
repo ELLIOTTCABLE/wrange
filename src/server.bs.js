@@ -108,7 +108,7 @@ function listPeople(set, _, req) {
 
 function start($staropt$star, set) {
   var port = $staropt$star !== undefined ? $staropt$star : 3000;
-  var api = Express.Router[/* make */15](undefined, undefined, undefined, /* () */0);
+  var api = Express.Router[/* make */17](undefined, undefined, undefined, /* () */0);
   Express.Router[/* get */4](api, "/records/:key/:order", Express.Middleware[/* from */5]((function (param, param$1) {
               return listPeople(set, param, param$1);
             })));
@@ -118,7 +118,7 @@ function start($staropt$star, set) {
   Express.Router[/* get */4](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
               return listPeople(set, param, param$1);
             })));
-  Express.Router[/* post */7](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
+  Express.Router[/* post */9](api, "/records", Express.Middleware[/* from */5]((function (param, param$1) {
               var set$1 = set;
               var req = param$1;
               var match = Express.Request[/* bodyText */5](req);
@@ -170,11 +170,12 @@ function start($staropt$star, set) {
                   });
               }
             })));
-  var app = Express.App[/* make */15](/* () */0);
+  var app = Express.App[/* make */17](/* () */0);
   Express.App[/* use */0](app, Express.Middleware[/* text */1](undefined, undefined, undefined, undefined, /* () */0));
   Express.App[/* use */0](app, Express.Middleware[/* from */5](logRequest));
-  Express.App[/* useRouterOnPath */18](app, "/v1", api);
-  return Express.App[/* listen */19](app, port, (function (param) {
+  Express.App[/* useRouterOnPath */20](app, "/v1", api);
+  return Express.App[/* listen */21](app, port, (function (param) {
+                var set$1 = set;
                 var port$1 = port;
                 var err = param;
                 var exit = 0;
@@ -194,6 +195,17 @@ function start($staropt$star, set) {
                   }
                 }
                 if (exit === 1) {
+                  var records = String(Person.set_length(set$1));
+                  console.log($$String.concat(" ", /* :: */[
+                            "Serving",
+                            /* :: */[
+                              records,
+                              /* :: */[
+                                "records;",
+                                /* [] */0
+                              ]
+                            ]
+                          ]));
                   console.log("Listening at http://127.0.0.1:" + String(port$1));
                   return /* () */0;
                 }

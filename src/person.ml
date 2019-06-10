@@ -129,6 +129,8 @@ let set_add set person =
    Hashtbl.replace set key person
 
 
+let set_length set = Hashtbl.length set
+
 let set_find_exn set last first birthday = Hashtbl.find set (last, first, birthday)
 
 (* A helper to sort over the given array that uses heap-sort for the lexicographically-least

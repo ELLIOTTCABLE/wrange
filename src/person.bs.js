@@ -236,6 +236,8 @@ function set_add(set, person) {
   return Hashtbl.replace(set, key, person);
 }
 
+var set_length = Hashtbl.length;
+
 function set_find_exn(set, last, first, birthday) {
   return Hashtbl.find(set, /* tuple */[
               last,
@@ -292,6 +294,7 @@ exports.of_json_exn = of_json_exn;
 exports.to_json = to_json;
 exports.set_create = set_create;
 exports.set_add = set_add;
+exports.set_length = set_length;
 exports.set_find_exn = set_find_exn;
 exports.array_of_set = array_of_set;
 exports.array_of_set_str_key = array_of_set_str_key;

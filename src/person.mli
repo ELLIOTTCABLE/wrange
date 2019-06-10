@@ -49,6 +49,8 @@ val set_create : unit -> set
 
 val set_add : set -> t -> unit
 
+val set_length : set -> int
+
 val set_find_exn : set -> string -> string -> string -> t
 
 val array_of_set : set -> sorts:(sort_key * sort_order) list -> t array

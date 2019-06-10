@@ -92,12 +92,14 @@ let listPeople set _next req (* res *) =
    >> Response.sendJson @@ make_success (Js.Json.array people)
 
 
-let announce port err =
+let announce set port err =
    match err with
    | exception Js.Exn.Error e ->
          Js.log e ;
          Node.Process.exit 1
    | _ ->
+         let records = Person.set_length set |> string_of_int in
+         Js.log (String.concat " " ["Serving"; records; "records;"]) ;
          Js.log ("Listening at http://127.0.0.1:" ^ string_of_int port)
 
 
@@ -112,4 +114,4 @@ let start ?(port = 3000) (set : Person.set) =
    app |. App.use (Middleware.text ()) ;
    app |. App.use (Middleware.from logRequest) ;
    app |. App.useRouterOnPath ~path:"/v1" api ;
-   app |. App.listen ~port ~onListen:(announce port) ()
+   app |. App.listen ~port ~onListen:(announce set port) ()
