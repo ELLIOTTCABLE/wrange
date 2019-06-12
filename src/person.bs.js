@@ -1,5 +1,6 @@
 'use strict';
 
+var List = require("bs-platform/lib/js/list.js");
 var $$String = require("bs-platform/lib/js/string.js");
 var Js_json = require("bs-platform/lib/js/js_json.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
@@ -112,6 +113,17 @@ var jsMapperConstantArray$3 = /* array */[
   ]
 ];
 
+function fieldToJs(param) {
+  return param + 0 | 0;
+}
+
+function fieldFromJs(param) {
+  if (param <= 4 && 0 <= param) {
+    return param - 0 | 0;
+  }
+  
+}
+
 function string_of_birthday(person) {
   var iso8601 = person[/* birthday */4].toISOString();
   var match = iso8601.split("T");
@@ -197,6 +209,43 @@ function to_object(p) {
         };
 }
 
+function to_string($staropt$star, $staropt$star$1, p) {
+  var sep = $staropt$star !== undefined ? $staropt$star : ", ";
+  var fields = $staropt$star$1 !== undefined ? $staropt$star$1 : /* :: */[
+      /* Last_name */0,
+      /* :: */[
+        /* First_name */1,
+        /* :: */[
+          /* Gender */2,
+          /* :: */[
+            /* Favourite_colour */3,
+            /* :: */[
+              /* Birthday */4,
+              /* [] */0
+            ]
+          ]
+        ]
+      ]
+    ];
+  return $$String.concat(sep, List.map((function (param) {
+                    var p$1 = p;
+                    var param$1 = param;
+                    switch (param$1) {
+                      case 0 : 
+                          return p$1[/* last_name */0];
+                      case 1 : 
+                          return p$1[/* first_name */1];
+                      case 2 : 
+                          return Js_mapperRt.binarySearch(4, p$1[/* gender */2], jsMapperConstantArray$2);
+                      case 3 : 
+                          return Js_mapperRt.binarySearch(9, p$1[/* favourite_colour */3], jsMapperConstantArray$3);
+                      case 4 : 
+                          return string_of_birthday(p$1);
+                      
+                    }
+                  }), fields));
+}
+
 function compare(key, a, b) {
   if (key >= 332064784) {
     if (key >= 847656566) {
@@ -235,12 +284,15 @@ exports.sort_keyToJs = sort_keyToJs;
 exports.sort_keyFromJs = sort_keyFromJs;
 exports.sort_orderToJs = sort_orderToJs;
 exports.sort_orderFromJs = sort_orderFromJs;
+exports.fieldToJs = fieldToJs;
+exports.fieldFromJs = fieldFromJs;
 exports.create = create;
 exports.of_string_description = of_string_description;
 exports.of_object = of_object;
 exports.to_object = to_object;
 exports.of_json_exn = of_json_exn;
 exports.to_json = to_json;
+exports.to_string = to_string;
 exports.nobody = nobody;
 exports.compare = compare;
 exports.string_of_birthday = string_of_birthday;

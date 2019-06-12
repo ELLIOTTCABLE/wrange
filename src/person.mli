@@ -7,6 +7,9 @@ type gender = [`Male | `Female | `Neither | `Unspecified]
 type colour =
    [`Black | `White | `Red | `Orange | `Yellow | `Green | `Blue | `Indigo | `Violet]
 
+type field = Last_name | First_name | Gender | Favourite_colour | Birthday
+[@@bs.deriving jsConverter]
+
 type abs
 
 type t =
@@ -42,6 +45,8 @@ val to_object : t -> abs
 val of_json_exn : Js.Json.t -> t
 
 val to_json : t -> Js.Json.t
+
+val to_string : ?sep:string -> ?fields:field list -> t -> string
 
 val nobody : unit -> t
 

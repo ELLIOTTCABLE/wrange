@@ -8,6 +8,9 @@ type colour =
    [`Black | `White | `Red | `Orange | `Yellow | `Green | `Blue | `Indigo | `Violet]
 [@@bs.deriving jsConverter]
 
+type field = Last_name | First_name | Gender | Favourite_colour | Birthday
+[@@bs.deriving jsConverter]
+
 (* XXX: I'd prefer that the type-converters be `Person.fromJs`, not `Person.tFromJs`, etceteras.
  *      Pending <https://github.com/BuckleScript/bucklescript/issues/2947>. *)
 type t =
@@ -78,6 +81,25 @@ let of_string_description ~last_name ~first_name ~gender ~favourite_colour ~birt
 let of_object obj = tFromJs obj
 
 let to_object p = tToJs p
+
+let field_to_string p = function
+   | Last_name ->
+         p.last_name
+   | First_name ->
+         p.first_name
+   | Gender ->
+         genderToJs p.gender
+   | Favourite_colour ->
+         colourToJs p.favourite_colour
+   | Birthday ->
+         string_of_birthday p
+
+
+let to_string ?(sep = ", ")
+      ?(fields = [Last_name; First_name; Gender; Favourite_colour; Birthday]) p
+   =
+   fields |> List.map (field_to_string p) |> String.concat sep
+
 
 let compare key a b =
    match key with
