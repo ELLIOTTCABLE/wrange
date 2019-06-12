@@ -60,6 +60,17 @@ describe("Data model", (function () {
                         var clone = Person.of_json_exn(json);
                         return Jest.Expect[/* toEqual */12](clone, Jest.Expect[/* expect */0](person));
                       }));
+                Jest.test("round-trips through abstraction into untyped-JavaScript", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                        var obj = Person.to_object(person);
+                        var clone = Person.of_object(obj);
+                        return Jest.Expect[/* toEqual */12](clone, Jest.Expect[/* expect */0](person));
+                      }));
+                Jest.test("can produce a formatted string description of itself", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
+                        var desc = Person.to_string("#", undefined, person);
+                        return Jest.Expect[/* toEqual */12]("Wittig#Kachel#Female#Yellow#1/25/1989", Jest.Expect[/* expect */0](desc));
+                      }));
                 describe("Record validation", (function () {
                         Jest.test("accepts a well-formed description", (function () {
                                 return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {

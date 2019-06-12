@@ -61,6 +61,19 @@ let _ =
                   expect person |> (toEqual clone)
                );
 
+         test "round-trips through abstraction into untyped-JavaScript" Expect.(fun ()->
+                  let person = make_person () in
+                  let obj = Person.to_object person in
+                  let clone = Person.of_object obj in
+                  expect person |> (toEqual clone)
+               );
+
+         test "can produce a formatted string description of itself" Expect.(fun ()->
+                  let person = make_person () in
+                  let desc = Person.to_string ~sep:"#" person in
+                  expect desc |> (toEqual "Wittig#Kachel#Female#Yellow#1/25/1989")
+               );
+
          describe "Record validation" begin fun ()->
             test "accepts a well-formed description" Expect.(fun ()->
                      expect (fun _ ->
