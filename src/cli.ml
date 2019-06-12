@@ -30,6 +30,11 @@ let serve port files =
    Server.start ~port set |> ignore
 
 
+(* TODO: Provide a flag to control date-printing; at the moment, this tool can't even
+   round-trip its own data — it accepts ISO dates, and prints American dates, as
+   required. That should be toggleable. *)
+(* TODO: Provide a flag to dump JSON; all the infrastructure is already there, just need
+   to wire it up. *)
 let print sep fields sorts files =
    let set = PersonSet.create () in
    files
