@@ -85,7 +85,7 @@ var fields = /* :: */[
   ]
 ];
 
-function start(port, files) {
+function serve(port, files) {
   var set = PersonSet.create(/* () */0);
   List.iter((function (file) {
           var more = PersonSet.of_file_exn(file);
@@ -129,9 +129,9 @@ var port$prime = Cmdliner.Arg[/* & */9](Cmdliner.Arg[/* value */20], Cmdliner.Ar
               ]
             ])));
 
-var start$prime_000 = Cmdliner.Term[/* $ */3](Cmdliner.Term[/* $ */3](Cmdliner.Term[/* const */0](start), port$prime), files$prime);
+var serve$prime_000 = Cmdliner.Term[/* $ */3](Cmdliner.Term[/* $ */3](Cmdliner.Term[/* const */0](serve), port$prime), files$prime);
 
-var start$prime_001 = Curry.app(Cmdliner.Term[/* info */14], [
+var serve$prime_001 = Curry.app(Cmdliner.Term[/* info */14], [
       undefined,
       undefined,
       undefined,
@@ -140,12 +140,12 @@ var start$prime_001 = Curry.app(Cmdliner.Term[/* info */14], [
       undefined,
       "Start a REST server publishing given person-records",
       undefined,
-      "start"
+      "serve"
     ]);
 
-var start$prime = /* tuple */[
-  start$prime_000,
-  start$prime_001
+var serve$prime = /* tuple */[
+  serve$prime_000,
+  serve$prime_001
 ];
 
 var doc = Curry._1(Printf.sprintf(/* Format */[
@@ -305,7 +305,7 @@ var commands_001 = /* :: */[
 ];
 
 var commands = /* :: */[
-  start$prime,
+  serve$prime,
   commands_001
 ];
 
@@ -317,11 +317,11 @@ exports.sprintf = sprintf;
 exports.sort_keys = sort_keys;
 exports.sort_orders = sort_orders;
 exports.fields = fields;
-exports.start = start;
+exports.serve = serve;
 exports.print = print;
 exports.files$prime = files$prime;
 exports.port$prime = port$prime;
-exports.start$prime = start$prime;
+exports.serve$prime = serve$prime;
 exports.sep$prime = sep$prime;
 exports.fields$prime = fields$prime;
 exports.sorts$prime = sorts$prime;

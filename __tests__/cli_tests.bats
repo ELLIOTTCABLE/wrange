@@ -25,8 +25,8 @@ wrange(){
    assert_success
 }
 
-@test "can display help for start" {
-   run wrange start --help
-   assert_line --partial 'wrange-start - Start a REST server publishing given person-records'
+@test "can display help for serve" {
+   run wrange serve --help
+   assert_line --partial 'wrange-serve - Start a REST server publishing given person-records'
    assert_success
 }

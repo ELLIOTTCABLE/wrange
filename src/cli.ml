@@ -21,7 +21,7 @@ let fields =
    ; ("birthday", Birthday) ]
 
 
-let start port files =
+let serve port files =
    let set = PersonSet.create () in
    files
    |> List.iter (fun file ->
@@ -60,9 +60,9 @@ let port' =
    Arg.(value & opt int 3000 & info ["p"; "port"] ~docv:"PORT" ~doc)
 
 
-let start' =
+let serve' =
    let doc = "Start a REST server publishing given person-records" in
-   (Term.(const start $ port' $ files'), Term.info ~doc "start")
+   (Term.(const serve $ port' $ files'), Term.info ~doc "serve")
 
 
 let sep' =
@@ -121,5 +121,5 @@ let default' =
 
 
 let _ =
-   let commands = [start'; print'] in
+   let commands = [serve'; print'] in
    Term.eval_choice default' commands

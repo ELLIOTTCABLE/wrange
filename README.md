@@ -28,7 +28,7 @@ Try, for example,
 
     wrange --help
     wrange print --help
-    wrange start --help
+    wrange serve --help
 
 For the printing-CLI, invocations that produce the requested outputs are as follows:
 
@@ -55,11 +55,11 @@ deChastelain, Jackquelin
 ...
 ```
 
-As for the REST server, start it with the `start` command, and then feed it some requests. For
+As for the REST server, start it with the `serve` command, and then feed it some requests. For
 example, if you have [HTTPie][] installed,
 
 ```sh
-$ wrange start example_data/* &
+$ wrange serve example_data/* &
 Serving 3000 records;
 Listening at http://127.0.0.1:3000
 [1] 2530
