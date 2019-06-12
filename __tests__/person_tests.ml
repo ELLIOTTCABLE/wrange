@@ -140,6 +140,22 @@ let _ =
                      expect result |> (toBe a_person)
                   );
 
+            test "can be merged with another" Expect.(fun ()->
+                     let first_set = PersonSet.create () in
+                     let second_set = PersonSet.create () in
+                     let old_person = make_person ~birthday:(make_birthday "1949-03-16") () in
+                     let new_person = make_person ~birthday:(make_birthday "1990-12-25") () in
+                     let third_person = make_person ~birthday:(make_birthday "2001-05-05") () in
+                     PersonSet.add first_set old_person;
+                     PersonSet.add second_set new_person;
+                     PersonSet.add second_set third_person;
+                     PersonSet.add_all ~src:second_set ~dest:first_set ();
+                     let len = PersonSet.length first_set in
+                     let found_person = PersonSet.find_exn first_set new_person.last_name new_person.first_name
+                           (Person.iso8601_of_birthday new_person) in
+                     expect (len, found_person) |> (toEqual (3, new_person))
+                  );
+
             test "can be folded into a array" Expect.(fun ()->
                      let set = PersonSet.create ()
                      and a_person = make_person ~first_name:"Kelly" ()
@@ -185,6 +201,19 @@ let _ =
                      PersonSet.add set another_person;
                      PersonSet.add set last_person;
                      let result = PersonSet.to_array set ~sorts:[`First, `Ascending; `Last, `Ascending] in
+                     expect (Array.map Person.(fun p -> p.first_name) result)
+                     |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
+                  );
+
+            test "can determine which sorts to apply based on opaque strings" Expect.(fun ()->
+                     let set = PersonSet.create ()
+                     and a_person = make_person ~first_name:"Kelly" ()
+                     and another_person = make_person ~first_name:"Andy" ()
+                     and last_person = make_person ~first_name:"Ranger" () in
+                     PersonSet.add set a_person;
+                     PersonSet.add set another_person;
+                     PersonSet.add set last_person;
+                     let result = PersonSet.to_array_str_sorts set ~sorts:["first", "ascending"; "last", "ascending"] in
                      expect (Array.map Person.(fun p -> p.first_name) result)
                      |> (toEqual [|"Andy"; "Kelly"; "Ranger"|])
                   );

@@ -133,6 +133,26 @@ describe("Data model", (function () {
                                 var result = PersonSet.find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.iso8601_of_birthday(a_person));
                                 return Jest.Expect[/* toBe */2](a_person, Jest.Expect[/* expect */0](result));
                               }));
+                        Jest.test("can be merged with another", (function () {
+                                var first_set = PersonSet.create(/* () */0);
+                                var second_set = PersonSet.create(/* () */0);
+                                var old_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1949-03-16")), /* () */0);
+                                var new_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1990-12-25")), /* () */0);
+                                var third_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("2001-05-05")), /* () */0);
+                                PersonSet.add(first_set, old_person);
+                                PersonSet.add(second_set, new_person);
+                                PersonSet.add(second_set, third_person);
+                                PersonSet.add_all(undefined, second_set, first_set, /* () */0);
+                                var len = PersonSet.length(first_set);
+                                var found_person = PersonSet.find_exn(first_set, new_person[/* last_name */0], new_person[/* first_name */1], Person.iso8601_of_birthday(new_person));
+                                return Jest.Expect[/* toEqual */12](/* tuple */[
+                                            3,
+                                            new_person
+                                          ], Jest.Expect[/* expect */0](/* tuple */[
+                                                len,
+                                                found_person
+                                              ]));
+                              }));
                         Jest.test("can be folded into a array", (function () {
                                 var set = PersonSet.create(/* () */0);
                                 var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
@@ -205,6 +225,35 @@ describe("Data model", (function () {
                                         /* tuple */[
                                           /* Last */847656566,
                                           /* Ascending */-800424520
+                                        ],
+                                        /* [] */0
+                                      ]
+                                    ]);
+                                return Jest.Expect[/* toEqual */12](/* array */[
+                                            "Andy",
+                                            "Kelly",
+                                            "Ranger"
+                                          ], Jest.Expect[/* expect */0]($$Array.map((function (p) {
+                                                      return p[/* first_name */1];
+                                                    }), result)));
+                              }));
+                        Jest.test("can determine which sorts to apply based on opaque strings", (function () {
+                                var set = PersonSet.create(/* () */0);
+                                var a_person = make_person(undefined, "Kelly", undefined, undefined, undefined, /* () */0);
+                                var another_person = make_person(undefined, "Andy", undefined, undefined, undefined, /* () */0);
+                                var last_person = make_person(undefined, "Ranger", undefined, undefined, undefined, /* () */0);
+                                PersonSet.add(set, a_person);
+                                PersonSet.add(set, another_person);
+                                PersonSet.add(set, last_person);
+                                var result = PersonSet.to_array_str_sorts(set, /* :: */[
+                                      /* tuple */[
+                                        "first",
+                                        "ascending"
+                                      ],
+                                      /* :: */[
+                                        /* tuple */[
+                                          "last",
+                                          "ascending"
                                         ],
                                         /* [] */0
                                       ]
