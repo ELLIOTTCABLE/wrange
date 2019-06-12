@@ -118,7 +118,8 @@ let listPeople set _next req (* res *) =
             order'
    in
    let people =
-      PersonSet.to_array_str_key set key order |> Array.map (fun p -> Person.to_json p)
+      PersonSet.to_array_str_sorts set ~sorts:[(key, order)]
+      |> Array.map (fun p -> Person.to_json p)
    in
    Response.status Response.StatusCode.Ok
    >> Response.sendJson @@ make_success (Js.Json.array people)

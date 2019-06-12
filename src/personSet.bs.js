@@ -12,37 +12,6 @@ var Wrange = require("./wrange.bs.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
-var Js_mapperRt = require("bs-platform/lib/js/js_mapperRt.js");
-
-var jsMapperConstantArray = /* array */[
-  /* tuple */[
-    -741283999,
-    "Gender"
-  ],
-  /* tuple */[
-    -243010339,
-    "Birthday"
-  ],
-  /* tuple */[
-    332064784,
-    "First"
-  ],
-  /* tuple */[
-    847656566,
-    "Last"
-  ]
-];
-
-var jsMapperConstantArray$1 = /* array */[
-  /* tuple */[
-    -800424520,
-    "Ascending"
-  ],
-  /* tuple */[
-    235215128,
-    "Descending"
-  ]
-];
 
 function create() {
   return Hashtbl.create(undefined, 100);
@@ -124,20 +93,20 @@ function to_array(set, sorts) {
   return arr;
 }
 
-function to_array_str_key(set, key, order) {
-  var param = $$String.capitalize($$String.lowercase(key));
-  var match = Js_mapperRt.revSearch(4, jsMapperConstantArray, param);
-  var key$prime = match !== undefined ? match : Pervasives.failwith(" \'" + (String(key) + "\' is not a recognized sort-key. "));
-  var param$1 = $$String.capitalize($$String.lowercase(order));
-  var match$1 = Js_mapperRt.revSearch(2, jsMapperConstantArray$1, param$1);
-  var order$prime = match$1 !== undefined ? match$1 : Pervasives.failwith(" \'" + (String(order) + "\' is not a recognized sort-order. "));
-  return to_array(set, /* :: */[
-              /* tuple */[
-                key$prime,
-                order$prime
-              ],
-              /* [] */0
-            ]);
+function to_array_str_sorts(set, sorts) {
+  var sorts$prime = List.map((function (param) {
+          var order = param[1];
+          var key = param[0];
+          var match = Person.sort_keyFromJs($$String.capitalize($$String.lowercase(key)));
+          var key$prime = match !== undefined ? match : Pervasives.failwith(" \'" + (String(key) + "\' is not a recognized sort-key. "));
+          var match$1 = Person.sort_orderFromJs($$String.capitalize($$String.lowercase(order)));
+          var order$prime = match$1 !== undefined ? match$1 : Pervasives.failwith(" \'" + (String(order) + "\' is not a recognized sort-order. "));
+          return /* tuple */[
+                  key$prime,
+                  order$prime
+                ];
+        }), sorts);
+  return to_array(set, sorts$prime);
 }
 
 var length = Hashtbl.length;
@@ -150,5 +119,5 @@ exports.add_all = add_all;
 exports.length = length;
 exports.find_exn = find_exn;
 exports.to_array = to_array;
-exports.to_array_str_key = to_array_str_key;
+exports.to_array_str_sorts = to_array_str_sorts;
 /* fs Not a pure module */

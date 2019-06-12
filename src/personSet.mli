@@ -34,4 +34,4 @@ val find_exn : t -> string -> string -> string -> Person.t
 
 val to_array : t -> sorts:(Person.sort_key * Person.sort_order) list -> Person.t array
 
-val to_array_str_key : t -> string -> string -> Person.t array
+val to_array_str_sorts : t -> sorts:(string * string) list -> Person.t array

@@ -10,6 +10,52 @@ var Caml_primitive = require("bs-platform/lib/js/caml_primitive.js");
 
 var jsMapperConstantArray = /* array */[
   /* tuple */[
+    -741283999,
+    "Gender"
+  ],
+  /* tuple */[
+    -243010339,
+    "Birthday"
+  ],
+  /* tuple */[
+    332064784,
+    "First"
+  ],
+  /* tuple */[
+    847656566,
+    "Last"
+  ]
+];
+
+function sort_keyToJs(param) {
+  return Js_mapperRt.binarySearch(4, param, jsMapperConstantArray);
+}
+
+function sort_keyFromJs(param) {
+  return Js_mapperRt.revSearch(4, jsMapperConstantArray, param);
+}
+
+var jsMapperConstantArray$1 = /* array */[
+  /* tuple */[
+    -800424520,
+    "Ascending"
+  ],
+  /* tuple */[
+    235215128,
+    "Descending"
+  ]
+];
+
+function sort_orderToJs(param) {
+  return Js_mapperRt.binarySearch(2, param, jsMapperConstantArray$1);
+}
+
+function sort_orderFromJs(param) {
+  return Js_mapperRt.revSearch(2, jsMapperConstantArray$1, param);
+}
+
+var jsMapperConstantArray$2 = /* array */[
+  /* tuple */[
     -811299821,
     "Neither"
   ],
@@ -27,7 +73,7 @@ var jsMapperConstantArray = /* array */[
   ]
 ];
 
-var jsMapperConstantArray$1 = /* array */[
+var jsMapperConstantArray$3 = /* array */[
   /* tuple */[
     -937474657,
     "Black"
@@ -113,10 +159,10 @@ function of_string_description(last_name, first_name, gender, favourite_colour, 
     return Pervasives.failwith("first_name cannot be empty");
   } else {
     var param = $$String.capitalize($$String.lowercase(gender));
-    var match = Js_mapperRt.revSearch(4, jsMapperConstantArray, param);
+    var match = Js_mapperRt.revSearch(4, jsMapperConstantArray$2, param);
     var gender$prime = match !== undefined ? match : Pervasives.failwith(" \'" + (String(gender) + "\' is not a recognized gender. good job! "));
     var param$1 = $$String.capitalize($$String.lowercase(favourite_colour));
-    var match$1 = Js_mapperRt.revSearch(9, jsMapperConstantArray$1, param$1);
+    var match$1 = Js_mapperRt.revSearch(9, jsMapperConstantArray$3, param$1);
     var favourite_colour$prime = match$1 !== undefined ? match$1 : Pervasives.failwith(" \'" + (String(favourite_colour) + "\' is not a recognized colour. good job! "));
     var birthday$prime = birthday_of_string_exn(birthday);
     return /* record */[
@@ -179,12 +225,16 @@ function to_json(person) {
   var json = { };
   json["last_name"] = person[/* last_name */0];
   json["first_name"] = person[/* first_name */1];
-  json["gender"] = Js_mapperRt.binarySearch(4, person[/* gender */2], jsMapperConstantArray);
-  json["favourite_colour"] = Js_mapperRt.binarySearch(9, person[/* favourite_colour */3], jsMapperConstantArray$1);
+  json["gender"] = Js_mapperRt.binarySearch(4, person[/* gender */2], jsMapperConstantArray$2);
+  json["favourite_colour"] = Js_mapperRt.binarySearch(9, person[/* favourite_colour */3], jsMapperConstantArray$3);
   json["birthday"] = person[/* birthday */4].toJSON();
   return json;
 }
 
+exports.sort_keyToJs = sort_keyToJs;
+exports.sort_keyFromJs = sort_keyFromJs;
+exports.sort_orderToJs = sort_orderToJs;
+exports.sort_orderFromJs = sort_orderFromJs;
 exports.create = create;
 exports.of_string_description = of_string_description;
 exports.of_object = of_object;

@@ -1,6 +1,6 @@
-type sort_key = [`Last | `First | `Gender | `Birthday]
+type sort_key = [`Last | `First | `Gender | `Birthday] [@@bs.deriving jsConverter]
 
-type sort_order = [`Ascending | `Descending]
+type sort_order = [`Ascending | `Descending] [@@bs.deriving jsConverter]
 
 type gender = [`Male | `Female | `Neither | `Unspecified]
 

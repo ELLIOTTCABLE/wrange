@@ -114,7 +114,13 @@ function listPeople(set, _, req) {
           return Js_primitive.undefined_to_opt(params[param]);
         }), Js_json.decodeString, "order");
   var order = match$1 !== undefined ? match$1 : "Ascending";
-  var people = $$Array.map(Person.to_json, PersonSet.to_array_str_key(set, key, order));
+  var people = $$Array.map(Person.to_json, PersonSet.to_array_str_sorts(set, /* :: */[
+            /* tuple */[
+              key,
+              order
+            ],
+            /* [] */0
+          ]));
   var partial_arg = make_success(people);
   var partial_arg$1 = Express.Response[/* sendJson */3];
   var partial_arg$2 = Express.Response[/* status */9](/* Ok */0);

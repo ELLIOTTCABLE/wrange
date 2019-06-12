@@ -1,7 +1,3 @@
-type sort_key = [`Last | `First | `Gender | `Birthday] [@@bs.deriving jsConverter]
-
-type sort_order = [`Ascending | `Descending] [@@bs.deriving jsConverter]
-
 type t = (string * string * string, Person.t) Hashtbl.t
 
 let create () = Hashtbl.create 100
@@ -80,18 +76,23 @@ let to_array set ~sorts =
    arr
 
 
-let to_array_str_key set key order =
-   let key' =
-      match key |> titlecase |> sort_keyFromJs with
-      | Some k ->
-            k
-      | None ->
-            failwith {j| '$(key)' is not a recognized sort-key. |j}
-   and order' =
-      match order |> titlecase |> sort_orderFromJs with
-      | Some o ->
-            o
-      | None ->
-            failwith {j| '$(order)' is not a recognized sort-order. |j}
+let to_array_str_sorts set ~sorts =
+   let sorts' =
+      sorts
+      |> List.map (fun (key, order) ->
+               let key' =
+                  match key |> titlecase |> Person.sort_keyFromJs with
+                  | Some k ->
+                        k
+                  | None ->
+                        failwith {j| '$(key)' is not a recognized sort-key. |j}
+               and order' =
+                  match order |> titlecase |> Person.sort_orderFromJs with
+                  | Some o ->
+                        o
+                  | None ->
+                        failwith {j| '$(order)' is not a recognized sort-order. |j}
+               in
+               (key', order'))
    in
-   to_array set ~sorts:[(key', order')]
+   to_array set ~sorts:sorts'
