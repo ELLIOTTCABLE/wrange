@@ -8,6 +8,10 @@ let hello () = print_endline "Hello, world!"
 
 let start port files =
    let set = PersonSet.create () in
+   files
+   |> List.iter (fun file ->
+            let more = PersonSet.of_file_exn file in
+            PersonSet.add_all ~src:more ~dest:set ()) ;
    Server.start ~port set |> ignore
 
 

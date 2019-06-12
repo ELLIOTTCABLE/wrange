@@ -12,6 +12,37 @@ let add set person =
    Hashtbl.replace set key person
 
 
+let of_records_exn records =
+   let set = create () in
+   let lexbuf = Lexing.from_string records in
+   let people = Wrange.parse_buf_exn lexbuf in
+   people |> List.iter (fun person -> add set person) ;
+   set
+
+
+let of_file_exn path =
+   (* FIXME: Why does this take a meaningless second argument? BuckleScript bug? *)
+   let path' = Node.Path.resolve path "" in
+   let contents = Node.Fs.readFileSync path' `utf8 in
+   of_records_exn contents
+
+
+let take_src ~src_member ~dest_member = src_member
+
+(* If [on_conflict] isn't provided, this conflict-handler will simply overwrite
+   pre-existing bindings in [dest] with the new ones from [src]. *)
+(* FIXME: This shouldn't need the additional [unit] argument; but for some reason, I
+   can't get the OCaml compiler to agree ... *)
+let add_all ?(on_conflict = take_src) ~src ~dest () =
+   src
+   |> Hashtbl.iter (fun k v ->
+            if Hashtbl.mem dest k then
+               let existing = Hashtbl.find dest k in
+               let replacement = on_conflict ~src_member:v ~dest_member:existing in
+               Hashtbl.replace dest k replacement
+            else Hashtbl.add dest k v)
+
+
 let length = Hashtbl.length
 
 let find_exn set last first birthday = Hashtbl.find set (last, first, birthday)

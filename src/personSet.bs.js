@@ -1,10 +1,14 @@
 'use strict';
 
+var Fs = require("fs");
 var List = require("bs-platform/lib/js/list.js");
+var Path = require("path");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Lexing = require("bs-platform/lib/js/lexing.js");
 var Person = require("./person.bs.js");
 var $$String = require("bs-platform/lib/js/string.js");
+var Wrange = require("./wrange.bs.js");
 var Hashtbl = require("bs-platform/lib/js/hashtbl.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
@@ -54,6 +58,38 @@ function add(set, person) {
     key_002
   ];
   return Hashtbl.replace(set, key, person);
+}
+
+function of_records_exn(records) {
+  var set = Hashtbl.create(undefined, 100);
+  var lexbuf = Lexing.from_string(records);
+  var people = Wrange.parse_buf_exn(lexbuf);
+  List.iter((function (person) {
+          return add(set, person);
+        }), people);
+  return set;
+}
+
+function of_file_exn(path) {
+  var path$prime = Path.resolve(path, "");
+  return of_records_exn(Fs.readFileSync(path$prime, "utf8"));
+}
+
+function take_src(src_member, _) {
+  return src_member;
+}
+
+function add_all($staropt$star, src, dest, _) {
+  var on_conflict = $staropt$star !== undefined ? $staropt$star : take_src;
+  return Hashtbl.iter((function (k, v) {
+                if (Hashtbl.mem(dest, k)) {
+                  var existing = Hashtbl.find(dest, k);
+                  var replacement = Curry._2(on_conflict, v, existing);
+                  return Hashtbl.replace(dest, k, replacement);
+                } else {
+                  return Hashtbl.add(dest, k, v);
+                }
+              }), src);
 }
 
 function find_exn(set, last, first, birthday) {
@@ -107,9 +143,12 @@ function to_array_str_key(set, key, order) {
 var length = Hashtbl.length;
 
 exports.create = create;
+exports.of_records_exn = of_records_exn;
+exports.of_file_exn = of_file_exn;
 exports.add = add;
+exports.add_all = add_all;
 exports.length = length;
 exports.find_exn = find_exn;
 exports.to_array = to_array;
 exports.to_array_str_key = to_array_str_key;
-/* No side effect */
+/* fs Not a pure module */

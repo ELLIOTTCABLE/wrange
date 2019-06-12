@@ -1,5 +1,6 @@
 'use strict';
 
+var List = require("bs-platform/lib/js/list.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Server = require("./server.bs.js");
 var Cmdliner = require("@elliottcable/bs-cmdliner/src/cmdliner.bs.js");
@@ -13,8 +14,12 @@ function hello() {
   return /* () */0;
 }
 
-function start(port, _) {
+function start(port, files) {
   var set = PersonSet.create(/* () */0);
+  List.iter((function (file) {
+          var more = PersonSet.of_file_exn(file);
+          return PersonSet.add_all(undefined, more, set, /* () */0);
+        }), files);
   Server.start(port, set);
   return /* () */0;
 }
