@@ -76,6 +76,20 @@ let _ =
                                     p.favourite_colour, Person.iso8601_of_birthday p)
                      |> toEqual ("Wittig", "Kachel", `Female, `Yellow, "1989-01-25")
                   );
+
+            test "rejects invalid, empty last_name" Expect.(fun ()->
+                     expect (fun _ ->
+                              Person.of_string_description ~last_name:"" ~first_name:"Kachel"
+                                 ~gender:"Female" ~favourite_colour:"Yellow" ~birthday:"1989-01-25"
+                           ) |> toThrow
+                  );
+
+            test "rejects invalid, empty first_name" Expect.(fun ()->
+                     expect (fun _ ->
+                              Person.of_string_description ~last_name:"Wittig" ~first_name:""
+                                 ~gender:"Female" ~favourite_colour:"Yellow" ~birthday:"1989-01-25"
+                           ) |> toThrow;
+                  );
          end;
 
          describe "Set of people" begin fun ()->

@@ -66,21 +66,31 @@ describe("Data model", (function () {
                                                       return Person.of_string_description("Wittig", "Kachel", "Female", "Yellow", "1989-01-25");
                                                     }))));
                               }));
-                        return Jest.test("accepts mis-cased variant tags", (function () {
-                                      var p = Person.of_string_description("Wittig", "Kachel", "feMAlE", "yElLOW", "1989-01-25");
-                                      return Jest.Expect[/* toEqual */12](/* tuple */[
-                                                  "Wittig",
-                                                  "Kachel",
-                                                  /* Female */-322301012,
-                                                  /* Yellow */82908052,
-                                                  "1989-01-25"
-                                                ], Jest.Expect[/* expect */0](/* tuple */[
-                                                      p[/* last_name */0],
-                                                      p[/* first_name */1],
-                                                      p[/* gender */2],
-                                                      p[/* favourite_colour */3],
-                                                      Person.iso8601_of_birthday(p)
-                                                    ]));
+                        Jest.test("accepts mis-cased variant tags", (function () {
+                                var p = Person.of_string_description("Wittig", "Kachel", "feMAlE", "yElLOW", "1989-01-25");
+                                return Jest.Expect[/* toEqual */12](/* tuple */[
+                                            "Wittig",
+                                            "Kachel",
+                                            /* Female */-322301012,
+                                            /* Yellow */82908052,
+                                            "1989-01-25"
+                                          ], Jest.Expect[/* expect */0](/* tuple */[
+                                                p[/* last_name */0],
+                                                p[/* first_name */1],
+                                                p[/* gender */2],
+                                                p[/* favourite_colour */3],
+                                                Person.iso8601_of_birthday(p)
+                                              ]));
+                              }));
+                        Jest.test("rejects invalid, empty last_name", (function () {
+                                return Jest.Expect[/* toThrow */18](Jest.Expect[/* expect */0]((function () {
+                                                  return Person.of_string_description("", "Kachel", "Female", "Yellow", "1989-01-25");
+                                                })));
+                              }));
+                        return Jest.test("rejects invalid, empty first_name", (function () {
+                                      return Jest.Expect[/* toThrow */18](Jest.Expect[/* expect */0]((function () {
+                                                        return Person.of_string_description("Wittig", "", "Female", "Yellow", "1989-01-25");
+                                                      })));
                                     }));
                       }));
                 describe("Set of people", (function () {
