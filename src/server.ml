@@ -72,11 +72,10 @@ let addPeople set _next req (* res *) =
    else
    match TypeIs.typeis req [|"text/plain"|] with
    | NoMatch ->
+         let error = "Content-Type of `text/plain` required for POST /records" in
+         print_endline ("!! " ^ error) ;
          Response.status Response.StatusCode.BadRequest
-         >> Response.sendJson
-            (make_failure
-                (Js.Json.string
-                    "Content-Type of `text/plain` required for POST /records"))
+         >> Response.sendJson (make_failure (Js.Json.string error))
    | Match _content_type -> (
          match Request.bodyText req with
          | None ->
@@ -132,8 +131,8 @@ let announce set port err =
          Node.Process.exit 1
    | _ ->
          let records = PersonSet.length set |> string_of_int in
-         Js.log (String.concat " " ["Serving"; records; "records;"]) ;
-         Js.log ("Listening at http://127.0.0.1:" ^ string_of_int port)
+         print_endline (String.concat " " ["Serving"; records; "records;"]) ;
+         print_endline ("Listening at http://127.0.0.1:" ^ string_of_int port)
 
 
 let start ?(port = 3000) (set : PersonSet.t) =

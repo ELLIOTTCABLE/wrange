@@ -185,7 +185,9 @@ function start($staropt$star, set) {
                     return Pervasives.failwith("unreachable: typeis.hasBody lied, or body-parser lied");
                   }
                 } else {
-                  var partial_arg$9 = make_failure("Content-Type of `text/plain` required for POST /records");
+                  var error = "Content-Type of `text/plain` required for POST /records";
+                  console.log("!! Content-Type of `text/plain` required for POST /records");
+                  var partial_arg$9 = make_failure(error);
                   var partial_arg$10 = Express.Response[/* sendJson */3];
                   var partial_arg$11 = Express.Response[/* status */9](/* BadRequest */19);
                   return (function (param) {
@@ -194,9 +196,9 @@ function start($staropt$star, set) {
                     });
                 }
               } else {
-                var error = "Body required for POST /records";
+                var error$1 = "Body required for POST /records";
                 console.log("!! Body required for POST /records");
-                var partial_arg$12 = make_failure(error);
+                var partial_arg$12 = make_failure(error$1);
                 var partial_arg$13 = Express.Response[/* sendJson */3];
                 var partial_arg$14 = Express.Response[/* status */9](/* BadRequest */19);
                 return (function (param) {
