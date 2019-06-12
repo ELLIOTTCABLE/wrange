@@ -14,6 +14,9 @@ to shipping a Dockerfile", but, again. time constraints.)
 
 tl;dr:
 
+    # a recent version of npm is required
+    npm install --global npm
+
     git clone https://github.com/ELLIOTTCABLE/wrange.git
     cd wrange
     npm install
