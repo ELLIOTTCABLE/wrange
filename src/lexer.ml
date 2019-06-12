@@ -1,4 +1,4 @@
-# 1 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 1 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
  
 open Lexing
 open Parser
@@ -12,7 +12,7 @@ let next_line lexbuf =
                pos_lnum = pos.pos_lnum + 1
     }
 
-# 16 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 16 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base = 
    "\000\000\251\255\001\000\003\000\006\000\007\000\009\000\011\000\
@@ -112,29 +112,29 @@ let rec read lexbuf =
 and __ocaml_lex_read_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 25 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 25 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
                   ( next_line lexbuf; NL )
-# 118 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 118 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 
   | 1 ->
-# 26 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 26 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
                   ( SEP )
-# 123 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 123 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 
   | 2 ->
-# 27 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 27 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
                   ( VAL (Lexing.lexeme lexbuf) )
-# 128 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 128 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 
   | 3 ->
-# 28 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 28 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
       ( raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf)) )
-# 133 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 133 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 
   | 4 ->
-# 29 "/Users/ec/Dropbox/Code/wrange/src/lexer.mll"
+# 29 "/Users/ec/Sync/Code/wrange/src/lexer.mll"
                   ( EOF )
-# 138 "/Users/ec/Dropbox/Code/wrange/src/lexer.ml"
+# 138 "/Users/ec/Sync/Code/wrange/src/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf; 
       __ocaml_lex_read_rec lexbuf __ocaml_lex_state
