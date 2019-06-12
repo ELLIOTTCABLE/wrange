@@ -114,17 +114,6 @@ var jsMapperConstantArray$3 = /* array */[
   ]
 ];
 
-function fieldToJs(param) {
-  return param + 0 | 0;
-}
-
-function fieldFromJs(param) {
-  if (param <= 4 && 0 <= param) {
-    return param - 0 | 0;
-  }
-  
-}
-
 function iso8601_of_birthday(person) {
   var iso8601 = person[/* birthday */4].toISOString();
   var match = iso8601.split("T");
@@ -303,8 +292,6 @@ exports.sort_keyToJs = sort_keyToJs;
 exports.sort_keyFromJs = sort_keyFromJs;
 exports.sort_orderToJs = sort_orderToJs;
 exports.sort_orderFromJs = sort_orderFromJs;
-exports.fieldToJs = fieldToJs;
-exports.fieldFromJs = fieldFromJs;
 exports.create = create;
 exports.of_string_description = of_string_description;
 exports.of_object = of_object;

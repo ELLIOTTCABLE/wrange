@@ -8,7 +8,6 @@ type colour =
    [`Black | `White | `Red | `Orange | `Yellow | `Green | `Blue | `Indigo | `Violet]
 
 type field = Last_name | First_name | Gender | Favourite_colour | Birthday
-[@@bs.deriving jsConverter]
 
 type abs
 

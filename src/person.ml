@@ -9,7 +9,6 @@ type colour =
 [@@bs.deriving jsConverter]
 
 type field = Last_name | First_name | Gender | Favourite_colour | Birthday
-[@@bs.deriving jsConverter]
 
 (* XXX: I'd prefer that the type-converters be `Person.fromJs`, not `Person.tFromJs`, etceteras.
  *      Pending <https://github.com/BuckleScript/bucklescript/issues/2947>. *)
