@@ -74,8 +74,7 @@ HTTP/1.1 201 Created
             "first_name": "Elliott",
 ...
 
-$ http
-http GET :3000/v1/records/last/ascending | jq '.value[0:3] | .[] | .last_name'
+$ http GET :3000/v1/records/last/ascending | jq '.value[0:3] | .[] | .last_name'
 "Abbet"
 "Abelevitz"
 "Ablett"
