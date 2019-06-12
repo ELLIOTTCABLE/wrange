@@ -8,10 +8,8 @@
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "prepare": "npm run build",
-    "start": "npm run build && node src/server.bs.js",
     "watch:test": "jest --watchAll",
-    "watch:build": "bsb -make-world -w",
-    "watch:start": "nodemon -e .bs.js --watch src src/server.bs.js"
+    "watch:build": "bsb -make-world -w"
   },
   "keywords": [
     "BuckleScript"
@@ -30,7 +28,6 @@
     "bats-assert": "^2.0.0",
     "bats-support": "^0.3.0",
     "bs-platform": "^4.0.1",
-    "nodemon": "^1.18.3",
     "ocaml-language-server": "^1.0.35"
   },
   "jest": {
