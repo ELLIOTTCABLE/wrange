@@ -5,6 +5,7 @@
 %token EOF
 
 %start <Person.t list> doc
+%start <Person.t> record
 
 %%
 

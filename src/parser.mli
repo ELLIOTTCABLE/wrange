@@ -13,4 +13,6 @@ exception Error
 
 (* The monolithic API. *)
 
+val record: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Person.t)
+
 val doc: (Lexing.lexbuf -> token) -> Lexing.lexbuf -> (Person.t list)

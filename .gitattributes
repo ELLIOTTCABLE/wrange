@@ -4,3 +4,4 @@ package-lock.json       linguist-generated -diff
 
 src/lexer.ml            linguist-generated -diff
 src/parser.ml           linguist-generated -diff
+src/parser.mli          linguist-generated -diff
