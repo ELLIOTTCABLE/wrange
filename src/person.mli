@@ -52,6 +52,8 @@ val nobody : unit -> t
 
 val compare : sort_key -> t -> t -> int
 
-val string_of_birthday : t -> string
+val iso8601_of_birthday : t -> string
+
+val american_date_of_birthday : t -> string
 
 val birthday_of_string_exn : string -> Js.Date.t

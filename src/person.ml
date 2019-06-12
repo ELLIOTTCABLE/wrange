@@ -23,13 +23,22 @@ type t =
 
 type abs = abs_t
 
-let string_of_birthday person =
+let iso8601_of_birthday person =
    let iso8601 = Js.Date.toISOString person.birthday in
    match Js.String.split "T" iso8601 with
    | [|date; _time|] ->
          date
    | _ ->
          failwith "Unreachable"
+
+
+(* Why am I doing custom date-formatting. *)
+let american_date_of_birthday person =
+   let mm = Js.Date.getUTCMonth person.birthday +. 1. in
+   let dd = Js.Date.getUTCDate person.birthday in
+   let yyyy = Js.Date.getUTCFullYear person.birthday in
+   [mm; dd; yyyy] |> List.map Js.Math.floor |> List.map string_of_int
+   |> String.concat "/"
 
 
 let birthday_of_string_exn iso8601 =
@@ -92,7 +101,7 @@ let field_to_string p = function
    | Favourite_colour ->
          colourToJs p.favourite_colour
    | Birthday ->
-         string_of_birthday p
+         american_date_of_birthday p
 
 
 let to_string ?(sep = ", ")

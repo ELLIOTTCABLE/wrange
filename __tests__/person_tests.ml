@@ -19,8 +19,14 @@ let _ =
 
          test "can produce a string for their birthday" Expect.(fun ()->
                   let person = make_person ~birthday:(make_birthday "1989-01-25") () in
-                  expect (Person.string_of_birthday person) |> (toBe "1989-01-25")
+                  expect (Person.iso8601_of_birthday person) |> (toBe "1989-01-25")
                );
+
+         test "can produce Americanized dates, if requested" Expect.(fun ()->
+                  let person = make_person ~birthday:(make_birthday "1989-01-25") () in
+                  expect (Person.american_date_of_birthday person) |> (toBe "1/25/1989")
+               );
+
 
          test "can parse a date-string as a convenience" Expect.(fun ()->
                   expect (fun _ ->
@@ -32,7 +38,7 @@ let _ =
                   let str = "1989-01-25" in
                   let date = Person.birthday_of_string_exn str in
                   let person = make_person ~birthday:date () in
-                  expect (Person.string_of_birthday person) |> (toBe str)
+                  expect (Person.iso8601_of_birthday person) |> (toBe str)
                );
 
          test "throws on a non-date birthday" Expect.(fun ()->
@@ -67,7 +73,7 @@ let _ =
                      let p = Person.of_string_description ~last_name:"Wittig" ~first_name:"Kachel"
                            ~gender:"feMAlE" ~favourite_colour:"yElLOW" ~birthday:"1989-01-25" in
                      expect Person.(p.last_name, p.first_name, p.gender,
-                                    p.favourite_colour, Person.string_of_birthday p)
+                                    p.favourite_colour, Person.iso8601_of_birthday p)
                      |> toEqual ("Wittig", "Kachel", `Female, `Yellow, "1989-01-25")
                   );
          end;
@@ -92,7 +98,7 @@ let _ =
                      let person = make_person () in
                      PersonSet.add set person;
                      let result = PersonSet.find_exn set person.last_name person.first_name
-                           (Person.string_of_birthday person) in
+                           (Person.iso8601_of_birthday person) in
                      expect result |> (toBe person)
                   );
 
@@ -103,7 +109,7 @@ let _ =
                      PersonSet.add set a_person;
                      PersonSet.add set another_person;
                      let result = PersonSet.find_exn set a_person.last_name a_person.first_name
-                           (Person.string_of_birthday a_person) in
+                           (Person.iso8601_of_birthday a_person) in
                      expect result |> (toBe a_person)
                   );
 

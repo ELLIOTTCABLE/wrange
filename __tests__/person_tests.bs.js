@@ -26,7 +26,11 @@ describe("Data model", (function () {
                       }));
                 Jest.test("can produce a string for their birthday", (function () {
                         var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1989-01-25")), /* () */0);
-                        return Jest.Expect[/* toBe */2]("1989-01-25", Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
+                        return Jest.Expect[/* toBe */2]("1989-01-25", Jest.Expect[/* expect */0](Person.iso8601_of_birthday(person)));
+                      }));
+                Jest.test("can produce Americanized dates, if requested", (function () {
+                        var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1989-01-25")), /* () */0);
+                        return Jest.Expect[/* toBe */2]("1/25/1989", Jest.Expect[/* expect */0](Person.american_date_of_birthday(person)));
                       }));
                 Jest.test("can parse a date-string as a convenience", (function () {
                         return Jest.Expect[/* toThrow */18](Jest.Expect[/* not_ */23](Jest.Expect[/* expect */0]((function () {
@@ -37,7 +41,7 @@ describe("Data model", (function () {
                         var str = "1989-01-25";
                         var date = Person.birthday_of_string_exn(str);
                         var person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(date), /* () */0);
-                        return Jest.Expect[/* toBe */2](str, Jest.Expect[/* expect */0](Person.string_of_birthday(person)));
+                        return Jest.Expect[/* toBe */2](str, Jest.Expect[/* expect */0](Person.iso8601_of_birthday(person)));
                       }));
                 Jest.test("throws on a non-date birthday", (function () {
                         return Jest.Expect[/* toThrow */18](Jest.Expect[/* expect */0]((function () {
@@ -75,7 +79,7 @@ describe("Data model", (function () {
                                                       p[/* first_name */1],
                                                       p[/* gender */2],
                                                       p[/* favourite_colour */3],
-                                                      Person.string_of_birthday(p)
+                                                      Person.iso8601_of_birthday(p)
                                                     ]));
                                     }));
                       }));
@@ -96,7 +100,7 @@ describe("Data model", (function () {
                                 var set = PersonSet.create(/* () */0);
                                 var person = make_person(undefined, undefined, undefined, undefined, undefined, /* () */0);
                                 PersonSet.add(set, person);
-                                var result = PersonSet.find_exn(set, person[/* last_name */0], person[/* first_name */1], Person.string_of_birthday(person));
+                                var result = PersonSet.find_exn(set, person[/* last_name */0], person[/* first_name */1], Person.iso8601_of_birthday(person));
                                 return Jest.Expect[/* toBe */2](person, Jest.Expect[/* expect */0](result));
                               }));
                         Jest.test("retrieves the correct person, even with an overloaded name", (function () {
@@ -105,7 +109,7 @@ describe("Data model", (function () {
                                 var another_person = make_person(undefined, undefined, undefined, undefined, Js_primitive.some(Person.birthday_of_string_exn("1990-12-25")), /* () */0);
                                 PersonSet.add(set, a_person);
                                 PersonSet.add(set, another_person);
-                                var result = PersonSet.find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.string_of_birthday(a_person));
+                                var result = PersonSet.find_exn(set, a_person[/* last_name */0], a_person[/* first_name */1], Person.iso8601_of_birthday(a_person));
                                 return Jest.Expect[/* toBe */2](a_person, Jest.Expect[/* expect */0](result));
                               }));
                         Jest.test("can be folded into a array", (function () {

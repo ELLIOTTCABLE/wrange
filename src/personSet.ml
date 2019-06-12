@@ -4,7 +4,7 @@ let create () = Hashtbl.create 100
 
 let add set person =
    let open Person in
-   let key = (person.last_name, person.first_name, string_of_birthday person) in
+   let key = (person.last_name, person.first_name, iso8601_of_birthday person) in
    Hashtbl.replace set key person
 
 

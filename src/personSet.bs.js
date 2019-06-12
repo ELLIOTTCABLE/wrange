@@ -20,7 +20,7 @@ function create() {
 function add(set, person) {
   var key_000 = person[/* last_name */0];
   var key_001 = person[/* first_name */1];
-  var key_002 = Person.string_of_birthday(person);
+  var key_002 = Person.iso8601_of_birthday(person);
   var key = /* tuple */[
     key_000,
     key_001,

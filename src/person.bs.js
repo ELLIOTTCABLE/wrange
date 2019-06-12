@@ -3,6 +3,7 @@
 var List = require("bs-platform/lib/js/list.js");
 var $$String = require("bs-platform/lib/js/string.js");
 var Js_json = require("bs-platform/lib/js/js_json.js");
+var Js_math = require("bs-platform/lib/js/js_math.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Js_mapperRt = require("bs-platform/lib/js/js_mapperRt.js");
@@ -124,7 +125,7 @@ function fieldFromJs(param) {
   
 }
 
-function string_of_birthday(person) {
+function iso8601_of_birthday(person) {
   var iso8601 = person[/* birthday */4].toISOString();
   var match = iso8601.split("T");
   if (match.length !== 2) {
@@ -132,6 +133,24 @@ function string_of_birthday(person) {
   } else {
     return match[0];
   }
+}
+
+function american_date_of_birthday(person) {
+  var mm = person[/* birthday */4].getUTCMonth() + 1;
+  var dd = person[/* birthday */4].getUTCDate();
+  var yyyy = person[/* birthday */4].getUTCFullYear();
+  return $$String.concat("/", List.map((function (prim) {
+                    return String(prim);
+                  }), List.map(Js_math.floor, /* :: */[
+                      mm,
+                      /* :: */[
+                        dd,
+                        /* :: */[
+                          yyyy,
+                          /* [] */0
+                        ]
+                      ]
+                    ])));
 }
 
 function birthday_of_string_exn(iso8601) {
@@ -240,7 +259,7 @@ function to_string($staropt$star, $staropt$star$1, p) {
                       case 3 : 
                           return Js_mapperRt.binarySearch(9, p$1[/* favourite_colour */3], jsMapperConstantArray$3);
                       case 4 : 
-                          return string_of_birthday(p$1);
+                          return american_date_of_birthday(p$1);
                       
                     }
                   }), fields));
@@ -295,6 +314,7 @@ exports.to_json = to_json;
 exports.to_string = to_string;
 exports.nobody = nobody;
 exports.compare = compare;
-exports.string_of_birthday = string_of_birthday;
+exports.iso8601_of_birthday = iso8601_of_birthday;
+exports.american_date_of_birthday = american_date_of_birthday;
 exports.birthday_of_string_exn = birthday_of_string_exn;
 /* No side effect */

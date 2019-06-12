@@ -289,7 +289,7 @@ var default$prime_001 = Curry.app(Cmdliner.Term[/* info */14], [
       undefined,
       undefined,
       undefined,
-      "a person-record parser and server",
+      "a person-record parser, sorter, and server",
       "v0.0.1",
       "wrange"
     ]);
