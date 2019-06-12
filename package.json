@@ -2,9 +2,9 @@
   "name": "wrange",
   "version": "0.0.1",
   "main": "src/exports.js",
-  "bin": "src/cli.bs.js",
+  "bin": "./src/cli.bs.js",
   "scripts": {
-    "test": "npm run build && jest --verbose",
+    "test": "npm run build && jest --verbose && bats __tests__",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "prepare": "npm run build",
@@ -26,6 +26,9 @@
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.2",
+    "bats": "^1.1.0",
+    "bats-assert": "^2.0.0",
+    "bats-support": "^0.3.0",
     "bs-platform": "^4.0.1",
     "nodemon": "^1.18.3",
     "ocaml-language-server": "^1.0.35"
