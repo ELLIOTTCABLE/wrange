@@ -14,6 +14,7 @@ var Wrange = require("./wrange.bs.js");
 var Express = require("bs-express/src/Express.js");
 var Js_json = require("bs-platform/lib/js/js_json.js");
 var Process = require("process");
+var PersonSet = require("./personSet.bs.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function make_success(value) {
@@ -96,7 +97,7 @@ function listPeople(set, _, req) {
           return Js_primitive.undefined_to_opt(params[param]);
         }), Js_json.decodeString, "order");
   var order = match$1 !== undefined ? match$1 : "Ascending";
-  var people = $$Array.map(Person.to_json, Person.array_of_set_str_key(set, key, order));
+  var people = $$Array.map(Person.to_json, PersonSet.to_array_str_key(set, key, order));
   var partial_arg = make_success(people);
   var partial_arg$1 = Express.Response[/* sendJson */3];
   var partial_arg$2 = Express.Response[/* status */9](/* Ok */0);
@@ -127,7 +128,7 @@ function start($staropt$star, set) {
                 try {
                   var people = Wrange.parse_buf_exn(lexbuf);
                   var people$prime = $$Array.map((function (person) {
-                          Person.set_add(set$1, person);
+                          PersonSet.add(set$1, person);
                           return Person.to_json(person);
                         }), $$Array.of_list(people));
                   var partial_arg = make_success(people$prime);
@@ -195,7 +196,7 @@ function start($staropt$star, set) {
                   }
                 }
                 if (exit === 1) {
-                  var records = String(Person.set_length(set$1));
+                  var records = String(PersonSet.length(set$1));
                   console.log($$String.concat(" ", /* :: */[
                             "Serving",
                             /* :: */[

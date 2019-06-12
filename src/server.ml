@@ -55,7 +55,7 @@ let addPerson set _next req (* res *) =
             let people' =
                Array.of_list people
                |> Array.map (fun person ->
-                        Person.set_add set person ;
+                        PersonSet.add set person ;
                         Person.to_json person)
             in
             Response.status Response.StatusCode.Created
@@ -86,7 +86,7 @@ let listPeople set _next req (* res *) =
             order'
    in
    let people =
-      Person.array_of_set_str_key set key order |> Array.map (fun p -> Person.to_json p)
+      PersonSet.to_array_str_key set key order |> Array.map (fun p -> Person.to_json p)
    in
    Response.status Response.StatusCode.Ok
    >> Response.sendJson @@ make_success (Js.Json.array people)
@@ -98,12 +98,12 @@ let announce set port err =
          Js.log e ;
          Node.Process.exit 1
    | _ ->
-         let records = Person.set_length set |> string_of_int in
+         let records = PersonSet.length set |> string_of_int in
          Js.log (String.concat " " ["Serving"; records; "records;"]) ;
          Js.log ("Listening at http://127.0.0.1:" ^ string_of_int port)
 
 
-let start ?(port = 3000) (set : Person.set) =
+let start ?(port = 3000) (set : PersonSet.t) =
    let api = Router.make () in
    Router.get api ~path:"/records/:key/:order" @@ Middleware.from (listPeople set) ;
    Router.get api ~path:"/records/:key" @@ Middleware.from (listPeople set) ;

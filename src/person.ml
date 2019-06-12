@@ -20,8 +20,6 @@ type t =
 
 type abs = abs_t
 
-type set = (string * string * string, t) Hashtbl.t
-
 let string_of_birthday person =
    let iso8601 = Js.Date.toISOString person.birthday in
    match Js.String.split "T" iso8601 with
@@ -45,6 +43,7 @@ let nobody () =
    ; birthday = Js.Date.make () }
 
 
+(* FIXME: duplicate. *)
 let titlecase str = str |> String.lowercase |> String.capitalize
 
 let create ~last_name ~first_name ~gender ~favourite_colour ~birthday =
@@ -118,63 +117,3 @@ let to_json person =
       (Js.Json.string (colourToJs person.favourite_colour)) ;
    Js.Dict.set json "birthday" (Js.Json.string (Js.Date.toJSONUnsafe person.birthday)) ;
    Js.Json.object_ json
-
-
-(* NOTE: I'd really prefer to make this a submodule, but ... BuckleScript ... -_-
- *       <https://github.com/BuckleScript/bucklescript/issues/2948> *)
-let set_create () = Hashtbl.create 100
-
-let set_add set person =
-   let key = (person.last_name, person.first_name, string_of_birthday person) in
-   Hashtbl.replace set key person
-
-
-let set_length set = Hashtbl.length set
-
-let set_find_exn set last first birthday = Hashtbl.find set (last, first, birthday)
-
-(* A helper to sort over the given array that uses heap-sort for the lexicographically-least
- * ordering (and often, only ordering); but then uses a stable merge-sort for subsequent
- * reorderings. *)
-let lexicographic_step arr i (key, order) =
-   let sort = if i = 0 then Array.fast_sort else Array.stable_sort in
-   let compare =
-      match order with
-      | `Ascending ->
-            compare key
-      | `Descending ->
-            fun a b -> ~-(compare key a b)
-   in
-   sort compare arr
-
-
-(* FIXME: First pass. Needs optimization.
- * FIXME: Horrific, imperative, jump-off-a-bridge-before-reading implementation.
- * FIXME: There's *gotta* be an Array.of_seq or Hashtbl.to_array implementation I can gank,
- *        somewhere. Hate rolling my own for super-generic code like this.*)
-let array_of_set set ~sorts =
-   let i = ref 0 in
-   let arr = Array.make (Hashtbl.length set) @@ nobody () in
-   (fun _key person ->
-       arr.(!i) <- person ;
-       i := !i + 1)
-   |. Hashtbl.iter set ;
-   List.iteri (lexicographic_step arr) (List.rev sorts) ;
-   arr
-
-
-let array_of_set_str_key set key order =
-   let key' =
-      match key |> titlecase |> sort_keyFromJs with
-      | Some k ->
-            k
-      | None ->
-            failwith {j| '$(key)' is not a recognized sort-key. |j}
-   and order' =
-      match order |> titlecase |> sort_orderFromJs with
-      | Some o ->
-            o
-      | None ->
-            failwith {j| '$(order)' is not a recognized sort-order. |j}
-   in
-   array_of_set set ~sorts:[(key', order')]

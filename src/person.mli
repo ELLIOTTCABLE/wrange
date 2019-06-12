@@ -7,8 +7,6 @@ type gender = [`Male | `Female | `Neither | `Unspecified]
 type colour =
    [`Black | `White | `Red | `Orange | `Yellow | `Green | `Blue | `Indigo | `Violet]
 
-type set
-
 type abs
 
 type t =
@@ -45,17 +43,9 @@ val of_json_exn : Js.Json.t -> t
 
 val to_json : t -> Js.Json.t
 
-val set_create : unit -> set
+val nobody : unit -> t
 
-val set_add : set -> t -> unit
-
-val set_length : set -> int
-
-val set_find_exn : set -> string -> string -> string -> t
-
-val array_of_set : set -> sorts:(sort_key * sort_order) list -> t array
-
-val array_of_set_str_key : set -> string -> string -> t array
+val compare : sort_key -> t -> t -> int
 
 val string_of_birthday : t -> string
 

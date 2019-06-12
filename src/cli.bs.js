@@ -1,9 +1,9 @@
 'use strict';
 
 var Curry = require("bs-platform/lib/js/curry.js");
-var Person = require("./person.bs.js");
 var Server = require("./server.bs.js");
 var Cmdliner = require("@elliottcable/bs-cmdliner/src/cmdliner.bs.js");
+var PersonSet = require("./personSet.bs.js");
 
 process.argv.shift()
 ;
@@ -14,7 +14,7 @@ function hello() {
 }
 
 function start(port, _) {
-  var set = Person.set_create(/* () */0);
+  var set = PersonSet.create(/* () */0);
   Server.start(port, set);
   return /* () */0;
 }

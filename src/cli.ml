@@ -7,7 +7,7 @@ open Cmdliner
 let hello () = print_endline "Hello, world!"
 
 let start port files =
-   let set = Person.set_create () in
+   let set = PersonSet.create () in
    Server.start ~port set |> ignore
 
 

@@ -3,6 +3,7 @@ const Symbol = require('es6-symbol')
     , isSymbol = require('es6-symbol/is-symbol')
 
 const $Person = require('./person.bs')
+const $PersonSet = require('./personSet.bs')
 
 
 // XXX: I abhor doing this manual invariants-checking when I'm using a strongly-typed language.
@@ -82,7 +83,7 @@ Person.prototype.birthdayString = function(){
 // FIXME: This doesn't actually create values that inherit, prototypically, from `Set`. Cheatin'.
 let Set = exports.Person.Set =
 function(){
-   let set = $Person.set_create()
+   let set = $PersonSet.create()
    set.add = Set.prototype.add
    set.find = Set.prototype.find
    set.toArray = Set.prototype.toArray
@@ -93,9 +94,9 @@ function(){
 // Given a `Person` (well, at least, a value retured by `new Person()`...), add that person to the
 // receiving `Set` (well, at least, to whatever sort of value is returned by `new Person.Set()`.)
 Set.prototype.add = function(abs_person){
-   $Person.set_add(this, abs_person)
+   $PersonSet.add(this, abs_person)
 }
 
 Set.prototype.find = function(last, first, birthday){
-   return $Person.set_find_exn(this, last, first, birthday)
+   return $PersonSet.find_exn(this, last, first, birthday)
 }
