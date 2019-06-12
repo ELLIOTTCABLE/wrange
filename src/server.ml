@@ -1,5 +1,26 @@
 open Express
 
+module TypeIs = struct
+   type match_result = Match of string | NoMatch
+
+   (* This is a horrible hack to stuff the untagged union-type returned by type-is's JS
+      API into a strictly typed environment safely. *)
+   external typeis' : Express.Request.t -> string array -> Js.Json.t = "type-is"
+   [@@bs.module]
+
+   let typeis req types =
+      match Js.Json.classify (typeis' req types) with
+      | Js.Json.JSONFalse ->
+            NoMatch
+      | Js.Json.JSONString str ->
+            Match str
+      | _ ->
+            failwith "`typeis` returned non-null, non-string value"
+
+
+   external hasBody : Express.Request.t -> bool = "" [@@bs.module "type-is"]
+end
+
 let make_success value =
    let json = Js.Dict.empty () in
    Js.Dict.set json "status" (Js.Json.string "success") ;
@@ -42,31 +63,43 @@ let logRequest next req =
    next Next.middleware
 
 
-let addPerson set _next req (* res *) =
-   match Request.bodyText req with
-   | None ->
+let addPeople set _next req (* res *) =
+   if not (TypeIs.hasBody req) then (
+      let error = "Body required for POST /records" in
+      print_endline ("!! " ^ error) ;
+      Response.status Response.StatusCode.BadRequest
+      >> Response.sendJson (make_failure (Js.Json.string error)) )
+   else
+   match TypeIs.typeis req [|"text/plain"|] with
+   | NoMatch ->
          Response.status Response.StatusCode.BadRequest
          >> Response.sendJson
-            (make_failure (Js.Json.string "Body required for POST /records"))
-   | Some text -> (
-         let lexbuf = Lexing.from_string text in
-         try
-            let people = Wrange.parse_buf_exn lexbuf in
-            let people' =
-               Array.of_list people
-               |> Array.map (fun person ->
-                        PersonSet.add set person ;
-                        Person.to_json person)
-            in
-            Response.status Response.StatusCode.Created
-            >> Response.sendJson @@ make_success (Js.Json.array people')
-         with
-         | Lexer.SyntaxError msg ->
-               Response.status Response.StatusCode.BadRequest
-               >> Response.sendJson @@ make_parsing_failure ~msg lexbuf
-         | Parser.Error ->
-               Response.status Response.StatusCode.BadRequest
-               >> Response.sendJson @@ make_parsing_failure lexbuf )
+            (make_failure
+                (Js.Json.string
+                    "Content-Type of `text/plain` required for POST /records"))
+   | Match _content_type -> (
+         match Request.bodyText req with
+         | None ->
+               failwith "unreachable: typeis.hasBody lied, or body-parser lied"
+         | Some text -> (
+               let lexbuf = Lexing.from_string text in
+               try
+                  let people = Wrange.parse_buf_exn lexbuf in
+                  let people' =
+                     Array.of_list people
+                     |> Array.map (fun person ->
+                              PersonSet.add set person ;
+                              Person.to_json person)
+                  in
+                  Response.status Response.StatusCode.Created
+                  >> Response.sendJson @@ make_success (Js.Json.array people')
+               with
+               | Lexer.SyntaxError msg ->
+                     Response.status Response.StatusCode.BadRequest
+                     >> Response.sendJson @@ make_parsing_failure ~msg lexbuf
+               | Parser.Error ->
+                     Response.status Response.StatusCode.BadRequest
+                     >> Response.sendJson @@ make_parsing_failure lexbuf ) )
 
 
 let listPeople set _next req (* res *) =
@@ -108,7 +141,7 @@ let start ?(port = 3000) (set : PersonSet.t) =
    Router.get api ~path:"/records/:key/:order" @@ Middleware.from (listPeople set) ;
    Router.get api ~path:"/records/:key" @@ Middleware.from (listPeople set) ;
    Router.get api ~path:"/records" @@ Middleware.from (listPeople set) ;
-   Router.post api ~path:"/records" @@ Middleware.from (addPerson set) ;
+   Router.post api ~path:"/records" @@ Middleware.from (addPeople set) ;
 
    let app = App.make () in
    app |. App.use (Middleware.text ()) ;

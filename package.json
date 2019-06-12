@@ -20,7 +20,8 @@
   "dependencies": {
     "@elliottcable/bs-cmdliner": "^1.0.2",
     "bs-express": "^0.12.0",
-    "es6-symbol": "^3.1.1"
+    "es6-symbol": "^3.1.1",
+    "type-is": "^1.6.18"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.2",
