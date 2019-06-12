@@ -2,6 +2,7 @@
   "name": "wrange",
   "version": "0.0.1",
   "main": "src/exports.js",
+  "bin": "src/cli.bs.js",
   "scripts": {
     "test": "npm run build && jest --verbose",
     "clean": "bsb -clean-world",
