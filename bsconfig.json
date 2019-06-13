@@ -6,14 +6,14 @@
        "dir": "src",
        "subdirs": true,
        "generators": [
-          {
-             "name": "ocamllex",
-             "edge": ["lexer.ml", ":", "lexer.mll"]
-          },
-          {
-             "name": "menhir",
-             "edge": ["parser.ml", "parser.mli", ":", "parser.mly"]
-          }
+         //  {
+         //     "name": "ocamllex",
+         //     "edge": ["lexer.ml", ":", "lexer.mll"]
+         //  },
+         //  {
+         //     "name": "menhir",
+         //     "edge": ["parser.ml", "parser.mli", ":", "parser.mly"]
+         //  }
        ]
     },
     {

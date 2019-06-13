@@ -14,22 +14,27 @@ to shipping a Dockerfile", but, again. time constraints.)
 
 tl;dr:
 
-    # a recent version of npm is required
+    brew install node # or similar
     npm install --global npm
+    # reasonably recent versions of node and npm are required
 
     git clone https://github.com/ELLIOTTCABLE/wrange.git
     cd wrange
     npm install
+    # or `npm install --global` to actually install the `wrange` command; see below
 
 ## Usage
 
-(If you're unfamiliar with Node, you can run commands in the root directory of this project as if
-you'd installed it globally, by replacing the command-name with `npx .` in the following commands.)
+If you're unfamiliar with the Node ecosystem: you can run commands in the root directory of this
+project as if you'd installed it globally, by replacing the command-name with `npx .` in the
+following commands.
 
 Usage is fairly-thoroughly documented via the built-in command-line help & manpage functionality.
 Try, for example,
 
     wrange --help
+    # or `npx . --help`, for example
+
     wrange print --help
     wrange serve --help
 
@@ -87,14 +92,20 @@ $ http GET :3000/v1/records/last/ascending | jq '.value[0:3] | .[] | .last_name'
 
 ## Contributing / Building
 To make modifications to, or build from, ML sources; as long as you make no changes to the parser
-or lexer components (which you shouldn't need to, as they're very simple), the scripts included in
-the `package.json` should get you pretty far out-of-the-box:
+or lexer components (which you shouldn't need to, as they're very simple), the dependencies and
+scripts included in the `package.json` should get you pretty far out-of-the-box:
 
     git clone https://github.com/ELLIOTTCABLE/wrange.git
     cd wrange
     npm install
+    # make your changes to, e.g. src/person.ml
+
     npm run build
     npm run test
 
-If you want to modify `parser.mly` or `lexer.mll`, though, you'll need a full OCaml development
-environment, Menhir, and ocamllex.
+If you want to *modify* `parser.mly` or `lexer.mll`, though, you'll need a full OCaml development
+environment, Menhir, and ocamllex. Once you've figured that out, uncomment the relevant entries in
+the `"generators"` section of `bsconfig.json`; thereafter, `npm run build` (which invokes
+[`bsb`][bsb]) will handle regeneration of `parser.ml` and `lexer.ml`.
+
+   [bsb]: <https://bucklescript.github.io/docs/en/build-overview> "The BuckleScript build-system"
