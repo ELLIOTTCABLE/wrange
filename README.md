@@ -14,14 +14,16 @@ to shipping a Dockerfile", but, again. time constraints.)
 
 tl;dr:
 
-    brew install node # or similar
-    npm install --global npm
-    # reasonably recent versions of node and npm are required
+```sh
+# reasonably recent versions of node and npm are required
+$ brew install node # or similar; you want >=v6
+$ npm install --global npm # you want >= v5.2
 
-    git clone https://github.com/ELLIOTTCABLE/wrange.git
-    cd wrange
-    npm install
-    # or `npm install --global` to actually install the `wrange` command; see below
+$ git clone https://github.com/ELLIOTTCABLE/wrange.git
+$ cd wrange
+$ npm install
+# or `npm install --global` to actually install the `wrange` command; see below
+```
 
 ## Usage
 
@@ -32,11 +34,13 @@ following commands.
 Usage is fairly-thoroughly documented via the built-in command-line help & manpage functionality.
 Try, for example,
 
-    wrange --help
-    # or `npx . --help`, for example
+```sh
+$ wrange --help
+# or `npx . --help`, for example
 
-    wrange print --help
-    wrange serve --help
+$ wrange print --help
+$ wrange serve --help
+```
 
 For the printing-CLI, invocations that produce the requested outputs are as follows:
 
@@ -95,13 +99,15 @@ To make modifications to, or build from, ML sources; as long as you make no chan
 or lexer components (which you shouldn't need to, as they're very simple), the dependencies and
 scripts included in the `package.json` should get you pretty far out-of-the-box:
 
-    git clone https://github.com/ELLIOTTCABLE/wrange.git
-    cd wrange
-    npm install
-    # make your changes to, e.g. src/person.ml
+```sh
+$ git clone https://github.com/ELLIOTTCABLE/wrange.git
+$ cd wrange
+$ npm install
+# make your changes to, e.g. src/person.ml
 
-    npm run build
-    npm run test
+$ npm run build
+$ npm run test
+```
 
 If you want to *modify* `parser.mly` or `lexer.mll`, though, you'll need a full OCaml development
 environment, Menhir, and ocamllex. Once you've figured that out, uncomment the relevant entries in
