@@ -23,7 +23,7 @@
     "type-is": "^1.6.18"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.4.2",
+    "@glennsl/bs-jest": "^0.4.10",
     "bats": "^1.1.0",
     "bats-assert": "^2.0.0",
     "bats-support": "^0.3.0",
